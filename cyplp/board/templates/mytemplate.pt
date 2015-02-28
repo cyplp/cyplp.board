@@ -8,79 +8,14 @@
   <body>
     <article>
       <div class="header">
-	<h1>plop</h1>
+	<h1>${board['name']}</h1>
       </div>
       <div class="main">
-	<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	</div>
-	<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	</div>
-		<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	</div>
-	<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	</div>
-	<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	</div>
-	<div class="column">
-	  <h2>TODO</h2>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
-	  </div>
-	  <div class="item">
-	    <span class="item-title">plop</span>
+	<div tal:repeat="column columns" class="column">
+	  <h2>${column['title']}</h2>
+	  <div tal:repeat="item column['items']" class="item">
+	    <h3 class="item-title">${item['title']}</h3>
+	    <p>${item['content']}</p>
 	  </div>
 	</div>
       </div>
