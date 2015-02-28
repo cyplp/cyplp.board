@@ -2,6 +2,7 @@
 <html >
   <head>
     <title>WiP</title>
+    <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet">
   </head>
 
   <body>
@@ -35,6 +36,30 @@
 	  </div>
 	</div>
 		<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+	<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+	<div class="column">
 	  <h2>TODO</h2>
 	  <div class="item">
 	    <span class="item-title">plop</span>
