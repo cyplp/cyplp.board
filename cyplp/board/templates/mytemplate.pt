@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <title>WiP</title>
+  </head>
+
+  <body>
+    <article>
+      <div class="header">
+	<h1>plop</h1>
+      </div>
+      <div class="main">
+	<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+	<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+		<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+	<div class="column">
+	  <h2>TODO</h2>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	  <div class="item">
+	    <span class="item-title">plop</span>
+	  </div>
+	</div>
+      </div>
+      <div class="footer">
+	<h4>something here</h4>
+      </div>
+    </article>
+  </body>
+</html>
