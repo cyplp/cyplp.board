@@ -79,3 +79,15 @@ body {
 #addColumn:target{
     display:block;
 }
+
+#addItem{
+    display:none;
+    position: fixed;
+
+
+    z-index: 1000;
+
+}
+#addItem:target{
+    display:block;
+}

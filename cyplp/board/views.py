@@ -6,7 +6,7 @@ from pyramid.events import subscriber, ApplicationCreated
 
 from cyplp.board.models import Board
 from cyplp.board.models import Column
-
+from cyplp.board.models import Item
 
 
 @subscriber(ApplicationCreated)
@@ -15,6 +15,7 @@ def application_created_subscriber(event):
     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
     Board.set_db(db)
     Column.set_db(db)
+    Item.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt")
 def home(request):
@@ -41,10 +42,20 @@ def board(request):
     boardId = request.matchdict['id']
     board = Board.get(boardId)
 
-    columns = request.db.view("column/by_board",
-                              startkey=boardId,
-                              endkey=boardId).all()
+    contents = request.db.view("board/content" ,
+                              startkey=[boardId, 0],
+                              endkey=[boardId, {}]).all()
 
+    columns = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+
+    for current in contents:
+        if current['key'][1] == 1:
+            tmp = current['value']
+
+            if 'items' not in columns[tmp['column']]:
+                columns[tmp['column']]['items'] = []
+
+            columns[tmp['column']]['items'].append(tmp)
 
     return {'columns': columns,
             'board': board,
@@ -59,4 +70,18 @@ def addColumn(request):
         column = Column(title=title.strip(), board=boardId.strip())
         column.save()
 
+    return HTTPFound(location=request.route_path('board', id=boardId))
+
+@view_config(route_name="addItem")
+def addItem(request):
+    boardId = request.matchdict['idBoard'].strip()
+    columnId = request.matchdict['idColumn'].strip()
+
+    title = request.POST.get('title', None)
+
+    if title:
+        item = Item(title=title.strip(),
+                    board=boardId,
+                    column=columnId)
+        item.save()
     return HTTPFound(location=request.route_path('board', id=boardId))

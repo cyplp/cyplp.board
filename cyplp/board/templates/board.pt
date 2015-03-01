@@ -11,14 +11,25 @@
 	<h1>${board.title}</h1>
       </div>
       <div class="main">
-	<div tal:repeat="column columns" class="column">
-	  <h2>${column['value']['title']}</h2>
-	  <tal:if condition="'items' in column['value']">
-	  <div tal:repeat="item column['value']['items']" class="item">
+	<div tal:repeat="column columns.values()" class="column">
+	  <h2>${column['title']}</h2>
+	  <tal:if condition="'items' in column">
+	  <div tal:repeat="item column['items']" class="item">
 	    <h3 class="item-title">${item['title']}</h3>
 	    <p>${item['content']}</p>
 	  </div>
 	  </tal:if>
+	  <div class="item">
+	    <h3 class="item-title"><a href="#addItem">Add an item</a></h3>
+	  </div>
+	  <form id="addItem"
+		method="POST"
+		action='${request.route_path("addItem",
+			idBoard=board._id,
+			idColumn=column["_id"])}'>
+	    <input name='title' type="text" />
+	    <input class='button' type="submit" value="add" />
+	  </form>
 	</div>
 	<div class='column'>
 	  <form method="POST"
