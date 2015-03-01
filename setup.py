@@ -13,6 +13,16 @@ requires = [
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
     'waitress',
+    'couchdbkit',
+    'pyramid_fanstatic',
+    'rebecca.fanstatic',
+    'couchdbkit',
+    'py-bcrypt',
+    'css.fontawesome',
+    'pyramid_mailer',
+    'js.jquery',
+    'fanstatic',
+
     ]
 
 setup(name='cyplp.board',

@@ -14,6 +14,7 @@
     margin: 1ex 1ex;
     border-radius: 25px;
     padding:0.5em;
+    align-items : stretch;
 
 }
 
@@ -37,3 +38,32 @@ body {
     flex-direction:column;
     flex-wrap:wrap;
 }
+
+.boardForm {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+#overlay{
+    display: none;
+    position: fixed;
+
+
+    z-index: 1000;
+    }
+#overlay:target{
+    display: block;
+    margin:auto;
+    padding: 2em 2em 2em 2em;
+    background-color: lightgray;
+    border-radius: 25px;
+    width:35em;
+    height:15em;
+    }
+
+.button{
+    font-weight: bold;
+    padding: 10px 25px;
+    background-color: white;
+    border-radius: 15px;
+    }
