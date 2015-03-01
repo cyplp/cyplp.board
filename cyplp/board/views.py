@@ -33,7 +33,7 @@ def addBoard(request):
     return HTTPFound(location=request.route_path('home'))
 
 
-@view_config(route_name='board', renderer='templates/mytemplate.pt')
+@view_config(route_name='board', renderer='templates/board.pt')
 def board(request):
 
     columns = [{'title': 'TODO',
