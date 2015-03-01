@@ -25,6 +25,7 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('board', '/board/{id}')
     config.add_route('addBoard', '/add/board')
+    config.add_route('addColumn', '/board/{id}/add/column')
 
     config.add_fanstatic_resources(['css.fontawesome.fontawesome',
                                     ], r'.*\.pt')

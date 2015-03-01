@@ -8,15 +8,26 @@
   <body>
     <article>
       <div class="header">
-	<h1>${board['name']}</h1>
+	<h1>${board.title}</h1>
       </div>
       <div class="main">
 	<div tal:repeat="column columns" class="column">
-	  <h2>${column['title']}</h2>
-	  <div tal:repeat="item column['items']" class="item">
+	  <h2>${column['value']['title']}</h2>
+	  <tal:if condition="'items' in column['value']">
+	  <div tal:repeat="item column['value']['items']" class="item">
 	    <h3 class="item-title">${item['title']}</h3>
 	    <p>${item['content']}</p>
 	  </div>
+	  </tal:if>
+	</div>
+	<div class='column'>
+	  <form method="POST"
+		action="${request.route_path('addColumn', id=board._id)}"
+		id='addColumn' class='item'>
+	    <input name="title" placeholder='column name' type="text"/>
+	    <input class='button' type="submit" value="add" />
+	  </form>
+	  <a class="item" href="#addColumn">Add a column</a>
 	</div>
       </div>
       <div class="footer">

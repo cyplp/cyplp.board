@@ -5,6 +5,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.events import subscriber, ApplicationCreated
 
 from cyplp.board.models import Board
+from cyplp.board.models import Column
 
 
 
@@ -13,6 +14,7 @@ def application_created_subscriber(event):
     registry = event.app.registry
     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
     Board.set_db(db)
+    Column.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt")
 def home(request):
@@ -36,60 +38,25 @@ def addBoard(request):
 @view_config(route_name='board', renderer='templates/board.pt')
 def board(request):
 
-    columns = [{'title': 'TODO',
-                '_id': 'ertyuiop',
-                'items': [{'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'}]},
-                {'title': 'Doing',
-                '_id': 'ertyuiop',
-                'items': [{'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'}]},
+    boardId = request.matchdict['id']
+    board = Board.get(boardId)
 
-                {'title': 'Pause',
-                '_id': 'ertyuiop',
-                'items': [{'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'}]},
-                {'title': 'Done',
-                '_id': 'ertyuiop',
-                'items': [{'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'}]},
-                {'title': 'Nope',
-                '_id': 'ertyuiop',
-                'items': [{'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'},
-                           {'title': 'item1',
-                           'content': 'rtyuibn,isdfsdfefdsfsdfd'}]}
+    columns = request.db.view("column/by_board",
+                              startkey=boardId,
+                              endkey=boardId).all()
 
-                ]
 
     return {'columns': columns,
-            'board': {'name': 'my first board'},
+            'board': board,
             }
+
+
+@view_config(route_name="addColumn")
+def addColumn(request):
+    boardId = request.matchdict['id']
+    title = request.POST.get('title', None)
+    if title:
+        column = Column(title=title.strip(), board=boardId.strip())
+        column.save()
+
+    return HTTPFound(location=request.route_path('board', id=boardId))

@@ -9,7 +9,8 @@
 .column {
     background-color:lightblue;
     flex:1;
-    min-width:15em;
+    min-width:15rem;
+    max-width:25rem;
     border-style:solid;
     margin: 1ex 1ex;
     border-radius: 25px;
@@ -47,10 +48,9 @@ body {
 #overlay{
     display: none;
     position: fixed;
-
-
     z-index: 1000;
     }
+
 #overlay:target{
     display: block;
     margin:auto;
@@ -67,3 +67,15 @@ body {
     background-color: white;
     border-radius: 15px;
     }
+
+#addColumn{
+    display:none;
+    position: fixed;
+
+
+    z-index: 1000;
+
+}
+#addColumn:target{
+    display:block;
+}
