@@ -12,8 +12,8 @@
 	<h1>${board.title}</h1>
 	<a href="${request.route_path('home')}">boards list</a>
       </div>
-      <div class="main">
-	<div tal:repeat="column columns.values()" class="column" dropzone="move" >
+      <div class="main" id="board" data-board="${board['_id']}" >
+	<div tal:repeat="column columns.values()" class="column" dropzone="move" data-column="${column['_id']}">
 	  <h2>${column['title']}</h2>
 	  <tal:if condition="'items' in column">
 	  <div tal:repeat="item column['items']" class="item" draggable='true' id='item-${item["_id"]}' dropzone="false">

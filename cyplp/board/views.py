@@ -85,3 +85,17 @@ def addItem(request):
                     column=columnId)
         item.save()
     return HTTPFound(location=request.route_path('board', id=boardId))
+
+@view_config(route_name='moveItem', renderer="json")
+def moveItem(request):
+    """
+    """
+    item = Item.get(request.matchdict['idItem'])
+
+    if item.board == request.matchdict['idBoard']:
+        if item.column == request.json_body['from']:
+            item.column = request.json_body['to']
+            item.save()
+            return "ok"
+
+    return "ko"

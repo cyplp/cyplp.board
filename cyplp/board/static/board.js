@@ -11,24 +11,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var items = document.querySelectorAll('.item');
     for (var item=0, len=items.length; item<len; item++)
 	{
-	    items[item].addEventListener('dragstart', function(e){
-								  e.dataTransfer.effectAllowed = "move";
-								  e.dataTransfer.setData("text", e.target.id);
+	    items[item].addEventListener('dragstart', function(event){
+		var column = event.target.parentNode.dataset.column;
+		console.log(column);
+		event.dataTransfer.effectAllowed = "move";
+		event.dataTransfer.setData("text", event.target.id);
+		event.dataTransfer.setData("from", column);
 								 });
 	}
 
     var columns = document.querySelectorAll('.column');
+    var boardId = document.getElementById('board').dataset.board;
     for(var item=0, len=columns.length; item<len; item++)
 	{
 	    columns[item].addEventListener('drop', function(event){
 		console.log('drop');
 		event.preventDefault();
-		id = event.dataTransfer.getData("text");
+		var id = event.dataTransfer.getData("text");
+		var from =  event.dataTransfer.getData("from");
+		var to = event.target.dataset.column;
+		var target = event.target;
 
-		target = event.target;
+		var req = new XMLHttpRequest();
+		req.open("POST", "/board/"+boardId+"/move/"+id.split("-")[1], true);
+		req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		req.onreadystatechange = function () { if (req.readyState != 4 || req.status != 200) return;
+						       console.log("Success: " + req.responseText); };
+		req.send(JSON.stringify({from: from, to:to}));
 		if (target.class="column"){
 		    target.appendChild(document.getElementById(id))
 		}
+
+
 	    });
 	    columns[item].addEventListener('dragover', function(e){
 	     							   e.preventDefault();});
@@ -37,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function eventAddItems(evt)
     {
-	console.log("clicked !");
+
 	node = evt.currentTarget;
 	console.log(node.dataset.column);
 
