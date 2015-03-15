@@ -97,7 +97,7 @@ body {
 }
 
 [draggable=true]:hover{
-    box-shadow:0 0 5px green; /* CSS3 */
+    box-shadow:0 0 5px blue;
 }
 
 [draggable=true], [dropzone]{
