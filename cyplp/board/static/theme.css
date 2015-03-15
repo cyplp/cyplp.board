@@ -80,7 +80,7 @@ body {
     display:block;
 }
 
-#addItem{
+.addItemForm{
     display:none;
     position: fixed;
 
@@ -88,6 +88,8 @@ body {
     z-index: 1000;
 
 }
-#addItem:target{
-    display:block;
+
+[draggable=true] {
+    user-select:none;
+    cursor:move;
 }
