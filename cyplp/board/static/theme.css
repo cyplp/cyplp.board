@@ -28,6 +28,8 @@
 }
 .header{
     background-color:gray;
+    display:flex;
+    align:auto;
 }
 
 .footer{

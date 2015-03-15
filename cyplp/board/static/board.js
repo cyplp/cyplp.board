@@ -20,5 +20,4 @@ function eventAddItems(evt)
 	form.style.display = 'block';
 
 	node.parentNode.parentNode.style.display = 'none' ;
-
     }

@@ -10,6 +10,7 @@
     <article>
       <div class="header">
 	<h1>${board.title}</h1>
+	<a href="${request.route_path('home')}">boards list</a>
       </div>
       <div class="main">
 	<div tal:repeat="column columns.values()" class="column" dropzone="move">
@@ -32,6 +33,7 @@
 			  idColumn=column["_id"])}'>
 	      <input name='title' type="text" />
 	      <input class='button' type="submit" value="add" />
+
 	    </form>
 	  </div>
 	</div>
