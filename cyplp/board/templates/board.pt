@@ -13,10 +13,10 @@
 	<a href="${request.route_path('home')}">boards list</a>
       </div>
       <div class="main">
-	<div tal:repeat="column columns.values()" class="column" dropzone="move">
+	<div tal:repeat="column columns.values()" class="column" dropzone="move" >
 	  <h2>${column['title']}</h2>
 	  <tal:if condition="'items' in column">
-	  <div tal:repeat="item column['items']" class="item" draggable='true'>
+	  <div tal:repeat="item column['items']" class="item" draggable='true' id='item-${item["_id"]}' dropzone="false">
 	    <h3 class="item-title">${item['title']}</h3>
 	    <p>${item['content']}</p>
 	  </div>

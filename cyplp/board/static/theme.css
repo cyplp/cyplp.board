@@ -95,3 +95,13 @@ body {
     user-select:none;
     cursor:move;
 }
+
+[draggable=true]:hover{
+    box-shadow:0 0 5px green; /* CSS3 */
+}
+
+[draggable=true], [dropzone]{
+    transition:
+        box-shadow linear 0.2s,
+        background-color linear 0.2s;
+}
