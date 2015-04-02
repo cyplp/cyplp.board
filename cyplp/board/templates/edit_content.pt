@@ -1,0 +1,14 @@
+<div class="main" data-board='${item.board}' data-item=${item._id}>
+  <h2 id="edit-title">
+    Edit ${item.title}
+  </h2>
+  <div class="content">
+    <h3>Content :</h3>
+    <form method="POST" action="${request.route_path('editItemContent', idBoard=item.board, idItem=item._id)}">
+      <textarea name="content">
+      ${item.content}
+
+      </textarea>
+      <input class='button' type="submit" value="save" />
+    </form>
+  </div>

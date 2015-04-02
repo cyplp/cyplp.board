@@ -3,6 +3,7 @@
   <head>
     <title>WiP Edit ${item.title}</title>
     <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
+    <script src="${request.static_url('cyplp.board:static/edit.js')}" />
   </head>
 	<body>
 	  <article>
@@ -11,13 +12,13 @@
 	    </div>
 	    <div>
 
-	      <div class="main">
+	      <div class="main" data-board='${item.board}' data-item=${item._id}>
 		<h2 id="edit-title">
 		  Edit ${item.title}
 		</h2>
 		<div class="content">
-		<h3>Content</h3>
-		<div id="edit-content">
+		<h3>Content :</h3>
+		<div id="edit-content" >
 		  ${item.content}
 
 		</div>

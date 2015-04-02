@@ -29,6 +29,8 @@ def main(global_config, **settings):
     config.add_route('addItem', '/board/{idBoard}/column/{idColumn}/add/item')
     config.add_route('moveItem', '/board/{idBoard}/move/{idItem}')
     config.add_route('editItem', '/board/{idBoard}/edit/{idItem}')
+    config.add_route('editItemContent', '/board/{idBoard}/edit/{idItem}/content')
+    config.add_route('saveItemContent', '/board/{idBoard}/save/{idItem}/content')
 
     config.add_fanstatic_resources(['css.fontawesome.fontawesome',
                                     ], r'.*\.pt')

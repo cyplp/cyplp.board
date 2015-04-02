@@ -109,3 +109,20 @@ def editItem(request):
         return {'item': item}
 
     return HTTPFound(location=request.route_path('board', id=boardId))
+
+@view_config(route_name="editItemContent", renderer="templates/edit_content.pt", request_method="GET")
+def editItemContentGet(request):
+    item = Item.get(request.matchdict['idItem'])
+
+    if item.board == request.matchdict['idBoard']:
+        return {'item': item}
+
+@view_config(route_name="editItemContent", renderer="templates/edit_content.pt", request_method="POST")
+def editItemContentPost(request):
+    item = Item.get(request.matchdict['idItem'])
+
+    if item.board == request.matchdict['idBoard']:
+        item.content = request.POST.get('content', '')
+        item.save()
+
+    return HTTPFound(location=request.route_path('editItem', idBoard=request.matchdict['idBoard'], idItem=request.matchdict['idItem']))
