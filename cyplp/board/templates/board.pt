@@ -19,6 +19,8 @@
 	  <div tal:repeat="item column['items']" class="item" draggable='true' id='item-${item["_id"]}' dropzone="false">
 	    <h3 class="item-title">${item['title']}</h3>
 	    <p>${item['content']}</p>
+
+	    <a class="edit" href="${request.route_path('editItem', idBoard=board._id, idItem=item['_id'])}">edit</a>
 	  </div>
 	  </tal:if>
 	  <div class="item">

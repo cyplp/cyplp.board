@@ -105,3 +105,8 @@ body {
         box-shadow linear 0.2s,
         background-color linear 0.2s;
 }
+
+.edit {
+    font-size: smaller;
+    float: right;
+    }
