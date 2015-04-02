@@ -125,4 +125,6 @@ def editItemContentPost(request):
         item.content = request.POST.get('content', '')
         item.save()
 
-    return HTTPFound(location=request.route_path('editItem', idBoard=request.matchdict['idBoard'], idItem=request.matchdict['idItem']))
+    return HTTPFound(location=request.route_path('editItem',
+                                                 idBoard=request.matchdict['idBoard'],
+                                                 idItem=request.matchdict['idItem']))

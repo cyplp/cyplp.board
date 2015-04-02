@@ -15,7 +15,7 @@ function editForm(event){
 	    {
 		return
 	    };
-	event.target.outerHTML = req.responseText;
+	event.target.parentNode.parentNode.outerHTML = req.responseText;
 	};
     req.send()
 }
