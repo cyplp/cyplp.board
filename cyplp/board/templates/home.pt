@@ -2,64 +2,65 @@
 <html >
   <head>
     <title>WiP</title>
-    <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet">
+    <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
   </head>
-  <style>
+  <!-- <style> -->
 
-    #overlay{
-    display: none;
-    position: fixed;
-    top:0; right:0; bottom:0; left:0;
-    background-color: black;
-    opacity: 1;
-    z-index: 1000;
-    }
-    #overlay:target{
-    display: block;
-    }
-    #overlay a{
-    font-weight: bold;
-    padding: 10px 25px;
-    background-color: white;
-    position: absolute;
-    top: 50%;
-    left: 50px;
-    }
-	</style>
+  <!--   #overlay{ -->
+  <!--   display: none; -->
+  <!--   position: fixed; -->
+  <!--   top:0; right:0; bottom:0; left:0; -->
+  <!--   background-color: black; -->
+  <!--   opacity: 1; -->
+  <!--   z-index: 1000; -->
+  <!--   } -->
+  <!--   #overlay:target{ -->
+  <!--   display: block; -->
+  <!--   } -->
+  <!--   #overlay a{ -->
+  <!--   font-weight: bold; -->
+  <!--   padding: 10px 25px; -->
+  <!--   background-color: white; -->
+  <!--   position: absolute; -->
+  <!--   top: 50%; -->
+  <!--   left: 50px; -->
+  <!--   } -->
+  <!-- 	</style> -->
 	<body>
-    <article>
-      <div class="header">
-	<h1>Select our board</h1>
-      </div>
-      <div>
+	  <article>
+	    <div class="header">
+	      <h1>Select our board</h1>
+	    </div>
+	    <div>
 
-	<div class="main">
-	<div id="overlay">
-	  <form method="POST" action="${request.route_path('addBoard')}" class="boardForm">
-	    <input placeholder="New board..." type="text" name="title"/>
-	    <input type="submit" value="create" class="button"/>
-	    <a class="button" href="#noWhere">
-	      Cancel
-	    </a>
+	      <div class="main">
+		<div id="overlay">
+		  <form method="POST" action="${request.route_path('addBoard')}" class="boardForm">
+		    <input placeholder="New board..." type="text" name="title"/>
+		    <input type="submit" value="create" class="button"/>
+		    <a class="button" href="#noWhere">
+		      Cancel
+		    </a>
 
-	  </form>
-	</div>
-	<div><a href="#overlay">New board</a></div>
-
-
-	<div>
-	  <ul>
-	    <li tal:repeat='board boards'>
-	    <a href="${request.route_path('board', id=board['value']['_id'])}">${board['value']['title']}</a>
-	    </li>
-	  </ul>
-	</div>
+		  </form>
+		</div>
+		<div><a href="#overlay">New board</a></div>
 
 
-      </div>
-      <div class="footer">
-	<h4>something here</h4>
-      </div>
-    </article>
-  </body>
+		<div>
+		  <ul>
+		    <li tal:repeat='board boards'>
+		      <a href="${request.route_path('board', id=board['value']['_id'])}">${board['value']['title']}</a>
+		    </li>
+		  </ul>
+		</div>
+
+
+	      </div>
+	      <div class="footer">
+		<h4>something here</h4>
+	      </div>
+	    </div>
+	  </article>
+	</body>
 </html>

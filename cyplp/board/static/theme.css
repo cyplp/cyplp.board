@@ -110,3 +110,16 @@ body {
     font-size: smaller;
     float: right;
     }
+
+#edit-content {
+    display: block;
+    margin:auto;
+    padding: 2em 2em 2em 2em;
+    background-color: white;
+    border-radius: 25px;
+    width:35em;
+    height:15em;
+    min-width:55rem;
+    border-style:solid;
+    margin: 1ex 1ex;
+}

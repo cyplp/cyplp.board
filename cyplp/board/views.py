@@ -99,3 +99,13 @@ def moveItem(request):
             return "ok"
 
     return "ko"
+
+@view_config(route_name="editItem", renderer="templates/edit.pt")
+def editItem(request):
+    boardId = request.matchdict['idBoard']
+    item = Item.get(request.matchdict['idItem'])
+
+    if item.board == request.matchdict['idBoard']:
+        return {'item': item}
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
