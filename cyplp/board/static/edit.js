@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function editForm(event){
-    console.log("heeeeee");
     var boardId = event.target.parentNode.parentNode.dataset.board;
     var itemId = event.target.parentNode.parentNode.dataset.item;
     var req = new XMLHttpRequest();
