@@ -36,6 +36,7 @@ def main(global_config, **settings):
     config.add_route('admin', '/admin')
     config.add_route('board', '/board/{id}')
     config.add_route('addBoard', '/add/board')
+    config.add_route('boardTitle', '/board/{id}/title')
     config.add_route('addColumn', '/board/{id}/add/column')
     config.add_route('addItem', '/board/{idBoard}/column/{idColumn}/add/item')
     config.add_route('moveItem', '/board/{idBoard}/move/{idItem}')

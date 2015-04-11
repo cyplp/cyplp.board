@@ -1,0 +1,7 @@
+<div class="header">
+  <form method="POST" action="${request.route_path('boardTitle', id=board['_id'])}">
+    <input type="text" name="title" value="${board['title']}" />
+    <input type="submit" value="save" />
+  </form>
+    <a href="${request.route_path('home')}">boards list</a>
+</div>

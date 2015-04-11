@@ -181,3 +181,22 @@ def adminPost(request):
         user.save()
 
     return HTTPFound(location=request.route_path('admin'))
+
+@view_config(route_name="boardTitle", renderer="templates/board_title_form.pt", request_method="GET", permission="authenticated")
+def boardTitleGet(request):
+    boardId = request.matchdict['id']
+    board = Board.get(boardId)
+
+    return {'board': board}
+
+
+@view_config(route_name="boardTitle", request_method="POST", permission="authenticated")
+def boardTitlePost(request):
+    boardId = request.matchdict['id']
+    board = Board.get(boardId)
+
+    if request.POST.get('title'):
+        board.title = request.POST.get('title')
+        board.save()
+
+    return HTTPFound(location=request.route_path('board', id=board._id))

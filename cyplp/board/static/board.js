@@ -65,6 +65,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	    columns[item].addEventListener('dragover', function(e){
 	     							   e.preventDefault();});
 	}
+
+    var title = document.getElementById('title-board');
+    title.addEventListener('click', function(event){
+	console.log(event.target);
+	var req = new XMLHttpRequest();
+	req.open("GET", "/board/"+boardId+"/title", true);
+	req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	req.onreadystatechange = function () {
+	    if (req.readyState != 4 || req.status != 200) return;
+	    event.target.parentNode.outerHTML = req.responseText;
+	};
+
+	req.send();
+    });
   });
 
 function eventAddItems(evt)
