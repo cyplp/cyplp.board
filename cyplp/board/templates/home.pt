@@ -4,28 +4,6 @@
     <title>WiP</title>
     <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
   </head>
-  <!-- <style> -->
-
-  <!--   #overlay{ -->
-  <!--   display: none; -->
-  <!--   position: fixed; -->
-  <!--   top:0; right:0; bottom:0; left:0; -->
-  <!--   background-color: black; -->
-  <!--   opacity: 1; -->
-  <!--   z-index: 1000; -->
-  <!--   } -->
-  <!--   #overlay:target{ -->
-  <!--   display: block; -->
-  <!--   } -->
-  <!--   #overlay a{ -->
-  <!--   font-weight: bold; -->
-  <!--   padding: 10px 25px; -->
-  <!--   background-color: white; -->
-  <!--   position: absolute; -->
-  <!--   top: 50%; -->
-  <!--   left: 50px; -->
-  <!--   } -->
-  <!-- 	</style> -->
 	<body>
 	  <article>
 	    <div class="header">

@@ -22,13 +22,13 @@ def application_created_subscriber(event):
     for schema in [Board, Column, Item, User]:
         schema.set_db(db)
 
-@view_config(route_name='home', renderer="templates/home.pt")
+@view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
 def home(request):
     boards = request.db.view("board/all").all()
 
     return {'boards': boards}
 
-@view_config(route_name="addBoard", request_method="POST")
+@view_config(route_name="addBoard", request_method="POST", permission="authenticated")
 def addBoard(request):
     title = request.POST.get('title', None)
 
@@ -41,7 +41,7 @@ def addBoard(request):
     return HTTPFound(location=request.route_path('home'))
 
 
-@view_config(route_name='board', renderer='templates/board.pt')
+@view_config(route_name='board', renderer='templates/board.pt', permission="authenticated")
 def board(request):
 
     boardId = request.matchdict['id']
@@ -67,7 +67,7 @@ def board(request):
             }
 
 
-@view_config(route_name="addColumn")
+@view_config(route_name="addColumn", permission="authenticated")
 def addColumn(request):
     boardId = request.matchdict['id']
     title = request.POST.get('title', None)
@@ -77,7 +77,7 @@ def addColumn(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name="addItem")
+@view_config(route_name="addItem", permission="authenticated")
 def addItem(request):
     boardId = request.matchdict['idBoard'].strip()
     columnId = request.matchdict['idColumn'].strip()
@@ -91,7 +91,7 @@ def addItem(request):
         item.save()
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name='moveItem', renderer="json")
+@view_config(route_name='moveItem', renderer="json", permission="authenticated")
 def moveItem(request):
     """
     """
@@ -105,7 +105,7 @@ def moveItem(request):
 
     return "ko"
 
-@view_config(route_name="editItem", renderer="templates/edit.pt")
+@view_config(route_name="editItem", renderer="templates/edit.pt", permission="authenticated")
 def editItem(request):
     boardId = request.matchdict['idBoard']
     item = Item.get(request.matchdict['idItem'])
@@ -115,14 +115,16 @@ def editItem(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name="editItemContent", renderer="templates/edit_content.pt", request_method="GET")
+@view_config(route_name="editItemContent", renderer="templates/edit_content.pt",
+             request_method="GET", permission="authenticated")
 def editItemContentGet(request):
     item = Item.get(request.matchdict['idItem'])
 
     if item.board == request.matchdict['idBoard']:
         return {'item': item}
 
-@view_config(route_name="editItemContent", renderer="templates/edit_content.pt", request_method="POST")
+@view_config(route_name="editItemContent", renderer="templates/edit_content.pt",
+             request_method="POST", permission="authenticated")
 def editItemContentPost(request):
     item = Item.get(request.matchdict['idItem'])
 
@@ -144,3 +146,31 @@ def validate(request, login, password):
                      user.password) != user.password:
         return False
     return True
+
+def callback(uid, *args, **kw):
+    return []
+
+@view_config(route_name='admin', renderer="templates/admin.pt", request_method="GET", permission="authenticated")
+def admin(request):
+    users = request.db.view("user/all").all()
+    return {"users": users }
+
+@view_config(route_name='admin', request_method="POST", permission="authenticated")
+def adminPost(request):
+    login = request.POST.get('login')
+    password = request.POST.get('password')
+    name = request.POST.get('name', '')
+
+    if not login or not password:
+        return HTTPFound(location=request.route_path('admin'))
+
+    password = bcrypt.hashpw(password.encode('utf-8'),
+                             bcrypt.gensalt())
+
+    try:
+        User.get(login)
+    except couchdbkit.exceptions.ResourceNotFound:
+        user = User(_id=login, password=password, name=name)
+        user.save()
+
+    return HTTPFound(location=request.route_path('admin'))

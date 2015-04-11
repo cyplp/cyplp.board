@@ -1,13 +1,21 @@
 from pyramid.config import Configurator
+from pyramid.security import Authenticated, Allow
 
 from couchdbkit import Server
 
 
+class RootFactory(object):
+    __acl__ = [
+    (Allow, Authenticated, 'authenticated'),
+    ]
+
+    def __init__(self, request):
+        pass
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    config = Configurator(settings=settings)
+    config = Configurator(settings=settings,root_factory=RootFactory )
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
                     'pyramid_mako',
@@ -25,6 +33,7 @@ def main(global_config, **settings):
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
+    config.add_route('admin', '/admin')
     config.add_route('board', '/board/{id}')
     config.add_route('addBoard', '/add/board')
     config.add_route('addColumn', '/board/{id}/add/column')
