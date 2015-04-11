@@ -2,6 +2,7 @@ import logging
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber, ApplicationCreated
 
 import bcrypt
@@ -95,11 +96,17 @@ def addItem(request):
 def moveItem(request):
     """
     """
+    # TODO schema ?
     item = Item.get(request.matchdict['idItem'])
 
+    from_ = request.json_body.get('from')
+    to = request.json_body.get('to')
+
+    if not from_ or not to:
+        return HTTPBadRequest("missing from or to")
     if item.board == request.matchdict['idBoard']:
-        if item.column == request.json_body['from']:
-            item.column = request.json_body['to']
+        if item.column == from_:
+            item.column = to
             item.save()
             return "ok"
 
