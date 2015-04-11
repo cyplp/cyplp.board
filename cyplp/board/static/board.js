@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var columnTitles = document.querySelectorAll('.column-title');
     for(var item=0, len=columnTitles.length; item<len; item++)
 	{
-	    columns[item].addEventListener('click',
+	    columnTitles[item].addEventListener('click',
 					   function(event){
 					       column = event.target.parentNode.parentNode.dataset.column;
 					       var req = new XMLHttpRequest();
@@ -93,9 +93,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   event.target.parentNode.outerHTML = req.responseText;
 					       };
 
-	req.send();
+					       req.send();
 					   });
 	}
+    var itemTitles = document.querySelectorAll('.item-title');
+    for(var item=0, len=itemTitles.length; item<len; item++)
+    {
+    	child = itemTitles[item].firstChild;
+
+    	if (child.hasChildNodes() == false)
+    	    {
+
+    		itemTitles[item].addEventListener('click',
+    					       function(event){
+						   var itemId = event.target.parentNode.parentNode.id.split('-')[1];
+						   console.log(itemId);
+						   var req = new XMLHttpRequest();
+						   req.open("GET", "/board/"+boardId+"/edit/"+itemId+"/title", true);
+						   req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+						   req.onreadystatechange = function () {
+						   if (req.readyState != 4 || req.status != 200) return;
+						       event.target.parentNode.outerHTML = req.responseText;
+						   };
+
+						   req.send();
+    					       });
+    	    }
+    	else
+    	    {
+    		console.log(itemTitles[item]);
+    	    }
+    }
   });
 
 function eventAddItems(evt)

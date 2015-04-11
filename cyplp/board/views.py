@@ -221,3 +221,25 @@ def columnTitlePost(request):
     column.save()
 
     return HTTPFound(location=request.route_path('board', id=boardId))
+
+@view_config(route_name="itemTitle", renderer="templates/item_title_form.pt", request_method="GET", permission="authenticated")
+def itemTitleGet(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = Item.get(itemId)
+
+    return {'item': item}
+
+
+@view_config(route_name="itemTitle", request_method="POST", permission="authenticated")
+def itemTitlePost(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = Item.get(itemId)
+    item.title = request.POST.get('title')
+
+    item.save()
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
