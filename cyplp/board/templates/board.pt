@@ -16,7 +16,9 @@
 	<div tal:repeat="column columns.values()"
 	     class="column" dropzone="move"
 	     data-column="${column['_id']}">
-	  <h2>${column['title']} <span class="column_number">(${len(column.get('items', []))})</span></h2>
+	  <div>
+	    <h2 class="column-title">${column['title']} <span class="column_number">(${len(column.get('items', []))})</span></h2>
+	  </div>
 	  <tal:if condition="'items' in column">
 
 	  <div tal:repeat="item column['items']"

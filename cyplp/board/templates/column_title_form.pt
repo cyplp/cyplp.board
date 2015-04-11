@@ -1,0 +1,6 @@
+<div>
+  <form method="POST" action="${request.route_path('columnTitle', idBoard=column['board'], idColumn=column['_id'])}">
+    <input type="text" name="title" value="${column['title']}" />
+    <input type="submit" value="save" />
+  </form>
+</div>

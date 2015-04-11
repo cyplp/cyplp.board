@@ -200,3 +200,24 @@ def boardTitlePost(request):
         board.save()
 
     return HTTPFound(location=request.route_path('board', id=board._id))
+
+@view_config(route_name="columnTitle", renderer="templates/column_title_form.pt", request_method="GET", permission="authenticated")
+def columnTitleGet(request):
+    boardId = request.matchdict['idBoard']
+    columnId = request.matchdict['idColumn']
+
+    column = Column.get(columnId)
+
+    return {'column': column}
+
+@view_config(route_name="columnTitle", request_method="POST", permission="authenticated")
+def columnTitlePost(request):
+    boardId = request.matchdict['idBoard']
+    columnId = request.matchdict['idColumn']
+
+    column = Column.get(columnId)
+    column.title = request.POST.get('title')
+
+    column.save()
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
