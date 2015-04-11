@@ -10,7 +10,9 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
-                    'rebecca.fanstatic', ]:
+                    'pyramid_mako',
+                    'rebecca.fanstatic',
+                    'pyramid_auth',]:
         config.include(include)
 
     config.registry.db = Server(uri=settings['couchdb.uri'])

@@ -4,18 +4,23 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.events import subscriber, ApplicationCreated
 
+import bcrypt
+import couchdbkit
+
+
 from cyplp.board.models import Board
 from cyplp.board.models import Column
 from cyplp.board.models import Item
+from cyplp.board.models import User
 
 
 @subscriber(ApplicationCreated)
 def application_created_subscriber(event):
     registry = event.app.registry
     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
-    Board.set_db(db)
-    Column.set_db(db)
-    Item.set_db(db)
+
+    for schema in [Board, Column, Item, User]:
+        schema.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt")
 def home(request):
@@ -128,3 +133,14 @@ def editItemContentPost(request):
     return HTTPFound(location=request.route_path('editItem',
                                                  idBoard=request.matchdict['idBoard'],
                                                  idItem=request.matchdict['idItem']))
+
+
+def validate(request, login, password):
+    try:
+        user = User.get(login)
+    except couchdbkit.exceptions.ResourceNotFound:
+        return False
+    if bcrypt.hashpw(password.encode('utf-8'),
+                     user.password) != user.password:
+        return False
+    return True
