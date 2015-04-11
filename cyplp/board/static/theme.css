@@ -2,8 +2,10 @@
    min-height: 100%;
     background-color:lightgray;
     flex:1;
-    display:flex;
+    display:-webkit-flex;
+    display: flex;
     flex-direction:row;
+    -webkit-flex-direction:row;
 }
 
 .column {
@@ -28,6 +30,7 @@
 }
 .header{
     background-color:gray;
+    display:-webkit-flex;
     display:flex;
     align:auto;
 }
@@ -37,14 +40,19 @@
 }
 
 body {
+    display:-webkit-flex;
     display:flex;
+    -webkit-flex-direction:column;
     flex-direction:column;
+    -webkit-flex-wrap:wrap;
     flex-wrap:wrap;
 }
 
 .boardForm {
+    dispay:-webkit-flex;
     display:flex;
     flex-wrap:wrap;
+    -webkit-flex-wrap:wrap;
 }
 
 #overlay{
@@ -123,3 +131,5 @@ body {
     border-style:solid;
     margin: 1ex 1ex;
 }
+
+.column_number {font-size:smaller;}

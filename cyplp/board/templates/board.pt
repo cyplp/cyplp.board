@@ -14,7 +14,7 @@
       </div>
       <div class="main" id="board" data-board="${board['_id']}" >
 	<div tal:repeat="column columns.values()" class="column" dropzone="move" data-column="${column['_id']}">
-	  <h2>${column['title']}</h2>
+	  <h2>${column['title']} <span class="column_number">(${len(column.get('items', []))})</span></h2>
 	  <tal:if condition="'items' in column">
 	  <div tal:repeat="item column['items']" class="item" draggable='true' id='item-${item["_id"]}' dropzone="false">
 	    <h3 class="item-title">${item['title']}</h3>
