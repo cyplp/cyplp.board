@@ -45,6 +45,8 @@ def main(global_config, **settings):
     config.add_route('itemTitle', '/board/{idBoard}/edit/{idItem}/title')
     config.add_route('editItemContent', '/board/{idBoard}/edit/{idItem}/content')
     config.add_route('saveItemContent', '/board/{idBoard}/save/{idItem}/content')
+    config.add_route("account", "/account/{id}")
+    config.add_route("updatepassword", "/account/{id}/password")
 
     config.add_fanstatic_resources(['css.fontawesome.fontawesome',
                                     ], r'.*\.pt')
