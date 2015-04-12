@@ -152,9 +152,14 @@ def validate(request, login, password):
     if bcrypt.hashpw(password.encode('utf-8'),
                      user.password) != user.password:
         return False
+
+    request.session['login'] = login
+    request.session['admin'] = user.admin
+
     return True
 
 def callback(uid, *args, **kw):
+
     return []
 
 @view_config(route_name='admin', renderer="templates/admin.pt", request_method="GET", permission="authenticated")

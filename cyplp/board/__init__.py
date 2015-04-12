@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
 from pyramid.security import Authenticated, Allow
-
+from pyramid.session import SignedCookieSessionFactory
 from couchdbkit import Server
 
 
@@ -15,7 +15,11 @@ class RootFactory(object):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    config = Configurator(settings=settings,root_factory=RootFactory )
+    config = Configurator(settings=settings, root_factory=RootFactory)
+
+    my_session_factory = SignedCookieSessionFactory(settings['secret'])
+    config.set_session_factory(my_session_factory)
+
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
                     'pyramid_mako',

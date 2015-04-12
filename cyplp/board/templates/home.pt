@@ -8,6 +8,7 @@
 	  <article>
 	    <div class="header">
 	      <h1>Select our board</h1>
+	      <a href="${request.route_path('account', id=request.session.login)}">my account</a>
 	    </div>
 	    <div>
 
