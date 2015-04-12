@@ -258,3 +258,37 @@ def accountPOST(request):
     user.save()
 
     return HTTPFound(location=request.route_path('account', id=user['_id']))
+
+
+@view_config(route_name="updatepassword", request_method="POST", permission="authenticated")
+def updatepasswordPOST(request):
+
+    user = User.get(request.matchdict['id'])
+
+    old = request.POST.get("old_password")
+    password = request.POST.get("password")
+    repeat = request.POST.get("repeat")
+
+    if not password:
+        # todo flash
+        print "empty password"
+        return HTTPFound(location=request.route_path('account', id=user['_id']))
+
+    if not (password == repeat):
+        # todo flash
+        print "mismatch password"
+        return HTTPFound(location=request.route_path('account', id=user['_id']))
+
+    if not validate(request, user._id, old):
+        # todo flash
+        print "old one password"
+        return HTTPFound(location=request.route_path('account', id=user['_id']))
+
+    password = bcrypt.hashpw(password.encode('utf-8'),
+                             bcrypt.gensalt())
+
+    user.password = password
+
+    user.save()
+    # todo flash
+    return HTTPFound(location=request.route_path('account', id=user['_id']))
