@@ -1,6 +1,6 @@
 <div>
   <form method="POST" action="${request.route_path('itemTitle', idBoard=item['board'], idItem=item['_id'])}">
-    <input type="text" name="title" value="${item['title']}" />
+    <input type="text" name="title" value="${item['title']}" autofocus="on"/>
     <input type="submit" value="save" />
   </form>
 </div>

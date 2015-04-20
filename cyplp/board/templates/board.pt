@@ -3,7 +3,7 @@
   <head>
     <title>WiP - ${board.title}</title>
     <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
-    <script src="${request.static_url('cyplp.board:static/board.js')}" />
+    <script src="${request.static_url('cyplp.board:static/board.js')}" ></script>
   </head>
 
   <body>
@@ -44,7 +44,7 @@
 		  action='${request.route_path("addItem",
 			  idBoard=board._id,
 			  idColumn=column["_id"])}'>
-	      <input name='title' type="text" />
+	      <input class="input" name='title' type="text" />
 	      <input class='button' type="submit" value="add" />
 
 	    </form>
@@ -54,7 +54,7 @@
 	  <form method="POST"
 		action="${request.route_path('addColumn', id=board._id)}"
 		id='addColumn' class='item'>
-	    <input name="title" placeholder='column name' type="text"/>
+	    <input name="title" placeholder='column name' type="text" />
 	    <input class='button' type="submit" value="add" />
 	  </form>
 	  <a class="item" href="#addColumn">Add a column</a>

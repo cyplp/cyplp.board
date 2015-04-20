@@ -14,7 +14,7 @@
 	<form method="POST" action="${request.route_path('admin')}">
 	  <span>
 	    <label for="login">Login:</label>
-	    <input type="email" name="login"/>
+	    <input type="email" name="login" autofocus="on"/>
 	  </span>
 	  <span>
 	    <label for="name">Name:</label>

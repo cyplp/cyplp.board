@@ -133,6 +133,6 @@ function eventAddItems(evt)
 
 	form = document.getElementById('addItem-'+node.dataset.column);
 	form.style.display = 'block';
-
+	form.querySelectorAll('.input')[0].autofocus = "on";
 	node.parentNode.parentNode.style.display = 'none' ;
     }
