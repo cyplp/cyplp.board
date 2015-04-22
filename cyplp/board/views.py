@@ -2,6 +2,7 @@ import logging
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
 from pyramid.events import ApplicationCreated
@@ -242,7 +243,10 @@ def itemTitleGet(request):
                               endkey=[boardId, 0]).all()
 
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
-    item = Item.get(itemId)
+    try:
+        item = Item.get(itemId)
+    except couchdbkit.exceptions.ResourceNotFound:
+        return HTTPNotFound()
 
     return {'item': item,
             'typeItems': typeItems
@@ -260,8 +264,8 @@ def itemTitlePost(request):
 
     typeItem = request.POST.get('type')
 
-    if typeItem:
-        item.typeItem = typeItem
+
+    item.typeItem = typeItem
 
     item.save()
 
