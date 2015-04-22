@@ -3,7 +3,8 @@ import logging
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPBadRequest
-from pyramid.events import subscriber, ApplicationCreated
+from pyramid.events import subscriber
+from pyramid.events import ApplicationCreated
 
 import bcrypt
 import couchdbkit
@@ -12,6 +13,7 @@ import couchdbkit
 from cyplp.board.models import Board
 from cyplp.board.models import Column
 from cyplp.board.models import Item
+from cyplp.board.models import TypeItem
 from cyplp.board.models import User
 
 
@@ -20,7 +22,7 @@ def application_created_subscriber(event):
     registry = event.app.registry
     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
 
-    for schema in [Board, Column, Item, User]:
+    for schema in [Board, Column, Item, TypeItem, User]:
         schema.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
@@ -53,6 +55,7 @@ def board(request):
                               endkey=[boardId, {}]).all()
 
     columns = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+    typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 2}
 
     for current in contents:
         if current['key'][1] == 1:
@@ -65,6 +68,7 @@ def board(request):
 
     return {'columns': columns,
             'board': board,
+            'typeItems': typeItems,
             }
 
 
@@ -232,9 +236,17 @@ def itemTitleGet(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
+
+    contents = request.db.view("board/config" ,
+                              startkey=[boardId, 0],
+                              endkey=[boardId, 0]).all()
+
+    typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     item = Item.get(itemId)
 
-    return {'item': item}
+    return {'item': item,
+            'typeItems': typeItems
+           }
 
 
 @view_config(route_name="itemTitle", request_method="POST", permission="authenticated")
@@ -242,8 +254,14 @@ def itemTitlePost(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
+
     item = Item.get(itemId)
     item.title = request.POST.get('title')
+
+    typeItem = request.POST.get('type')
+
+    if typeItem:
+        item.typeItem = typeItem
 
     item.save()
 
@@ -297,3 +315,55 @@ def updatepasswordPOST(request):
     user.save()
     # todo flash
     return HTTPFound(location=request.route_path('account', id=user['_id']))
+
+@view_config(route_name="boardConfig", request_method="GET",
+             permission="authenticated", renderer="templates/board_config.pt")
+def boardConfigGet(request):
+    boardId = request.matchdict['id']
+
+    board = Board.get(boardId)
+    contents = request.db.view("board/config" ,
+                              startkey=[boardId, 0],
+                              endkey=[boardId, {}]).all()
+
+    typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+
+    return {'board': board,
+            'typeItems': typeItems}
+
+@view_config(route_name="boardConfig", request_method="POST",
+             permission="authenticated")
+def boardConfigPost(request):
+    boardId = request.matchdict['id']
+
+    name = request.POST.get('name')
+    color = request.POST.get('color', '#FFFFFF')
+    if name:
+        typeItem = TypeItem(name=name,
+                            color=color,
+                            board=boardId)
+        typeItem.save()
+
+    return HTTPFound(location=request.route_path('boardConfig', id=boardId))
+
+
+
+
+
+@view_config(route_name="boardCSS", request_method="GET",
+             permission="authenticated")
+def boardCSS(request):
+    boardId = request.matchdict['id']
+    board = Board.get(boardId)
+    contents = request.db.view("board/config" ,
+                              startkey=[boardId, 0],
+                              endkey=[boardId, {}]).all()
+
+    typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
+                 for current in contents if current['key'][1] == 0]
+
+    response = request.response
+
+    response.body = "\n".join(typeItems)
+    response.content_type = 'text/css'
+    return response

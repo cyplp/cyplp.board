@@ -4,6 +4,7 @@
     <title>WiP - ${board.title}</title>
     <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
     <script src="${request.static_url('cyplp.board:static/board.js')}" ></script>
+    <link href="${request.route_path('boardCSS', id=board['_id'])}" rel="stylesheet"></link>
   </head>
 
   <body>
@@ -11,6 +12,7 @@
       <div class="header">
 	<h1 id="title-board" data-board="${board['_id']}">${board.title}</h1>
 	<a href="${request.route_path('home')}">boards list</a>
+	<a href="${request.route_path('boardConfig',id=board['_id'])}">Configure this board</a>
       </div>
       <div class="main" id="board" data-board="${board['_id']}" >
 	<div tal:repeat="column columns.values()"
@@ -22,7 +24,7 @@
 	  <tal:if condition="'items' in column">
 
 	  <div tal:repeat="item column['items']"
-	       class="item" draggable='true'
+	       class="item type_${item.get('typeItem', '')}" draggable='true'
 	       id='item-${item["_id"]}'
 	       dropzone="false">
 	    <div>

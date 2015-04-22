@@ -1,6 +1,13 @@
 <div>
   <form method="POST" action="${request.route_path('itemTitle', idBoard=item['board'], idItem=item['_id'])}">
     <input type="text" name="title" value="${item['title']}" autofocus="on"/>
+    <select name="type">
+      <option></option>
+      <option tal:repeat="type typeItems"
+	      tal:attributes="selected item.getType() == type"
+	      class="type_${type}"
+	      value="${type}">${typeItems[type]['name']}</option>
+    </select>
     <input type="submit" value="save" />
   </form>
 </div>
