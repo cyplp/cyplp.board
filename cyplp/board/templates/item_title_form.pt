@@ -8,6 +8,13 @@
 	      class="type_${type}"
 	      value="${type}">${typeItems[type]['name']}</option>
     </select>
+
+    <select name="tags" id="tags" tal:condition="tags" multiple="true">
+      <option tal:repeat="tag tags"
+	      tal:attributes="selected tag in item.getTags()"
+	      class="tag_${tag}"
+	      value="${tag}">${tags[tag]['name']}</option>
+    </select>
     <input type="submit" value="save" />
   </form>
 </div>

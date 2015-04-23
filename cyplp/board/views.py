@@ -16,6 +16,7 @@ from cyplp.board.models import Column
 from cyplp.board.models import Item
 from cyplp.board.models import TypeItem
 from cyplp.board.models import User
+from cyplp.board.models import Tag
 
 
 @subscriber(ApplicationCreated)
@@ -23,7 +24,7 @@ def application_created_subscriber(event):
     registry = event.app.registry
     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
 
-    for schema in [Board, Column, Item, TypeItem, User]:
+    for schema in [Board, Column, Item, TypeItem, User, Tag]:
         schema.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
@@ -240,16 +241,19 @@ def itemTitleGet(request):
 
     contents = request.db.view("board/config" ,
                               startkey=[boardId, 0],
-                              endkey=[boardId, 0]).all()
+                              endkey=[boardId, {}]).all()
 
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+    tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
+
     try:
         item = Item.get(itemId)
     except couchdbkit.exceptions.ResourceNotFound:
         return HTTPNotFound()
 
     return {'item': item,
-            'typeItems': typeItems
+            'typeItems': typeItems,
+            'tags': tags,
            }
 
 
@@ -264,6 +268,9 @@ def itemTitlePost(request):
 
     typeItem = request.POST.get('type')
 
+    tags = request.POST.getall('tags')
+
+    item.tags = tags
 
     item.typeItem = typeItem
 
@@ -331,9 +338,11 @@ def boardConfigGet(request):
                               endkey=[boardId, {}]).all()
 
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+    tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
 
     return {'board': board,
-            'typeItems': typeItems}
+            'typeItems': typeItems,
+            'tags': tags}
 
 @view_config(route_name="boardConfig", request_method="POST",
              permission="authenticated")
@@ -343,15 +352,18 @@ def boardConfigPost(request):
     name = request.POST.get('name')
     color = request.POST.get('color', '#FFFFFF')
     if name:
-        typeItem = TypeItem(name=name,
-                            color=color,
-                            board=boardId)
-        typeItem.save()
+        if request.POST.get('form', 'type') == 'type':
+            typeItem = TypeItem(name=name,
+                                color=color,
+                                board=boardId)
+            typeItem.save()
+        else:
+            tag = Tag(name=name,
+                color=color,
+                board=boardId)
+            tag.save()
 
     return HTTPFound(location=request.route_path('boardConfig', id=boardId))
-
-
-
 
 
 @view_config(route_name="boardCSS", request_method="GET",
@@ -366,8 +378,12 @@ def boardCSS(request):
     typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
                  for current in contents if current['key'][1] == 0]
 
+    tags = [".tag_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
+                 for current in contents if current['key'][1] == 1]
+
     response = request.response
 
-    response.body = "\n".join(typeItems)
+    response.body = '\n'.join(["\n".join(typeItems), "\n".join(tags)])
+
     response.content_type = 'text/css'
     return response

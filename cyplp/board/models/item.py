@@ -8,9 +8,16 @@ class Item(couchdbkit.Document):
     column = couchdbkit.StringProperty()
     board = couchdbkit.StringProperty()
     typeItem = couchdbkit.StringProperty()
+    tags = couchdbkit.StringListProperty()
 
     def getType(self):
         try:
             return self.typeItem
         except couchdbkit.exceptions.ResourceNotFound:
             return ''
+
+    def getTags(self):
+        try:
+            return self.tags
+        except couchdbkit.exceptions.ResourceNotFound:
+            return []
