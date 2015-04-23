@@ -42,7 +42,7 @@
 	  <div class="item">
 	    <h3 class="item-title"><a class="addItem" href="#addItem" data-column="${column['_id']}">Add an item</a></h3>
 	  </div>
-	  <div class="item">
+	  <div >
 	    <form id="addItem-${column['_id']}"
 		  class="addItemForm item-title"
 		  method="POST"
@@ -55,14 +55,14 @@
 	    </form>
 	  </div>
 	</div>
-	<div class='column'>
+	<div >
 	  <form method="POST"
 		action="${request.route_path('addColumn', id=board._id)}"
 		id='addColumn' class='item'>
 	    <input name="title" placeholder='column name' type="text" />
 	    <input class='button' type="submit" value="add" />
 	  </form>
-	  <a class="item" href="#addColumn">Add a column</a>
+	  <a class="column" href="#addColumn">Add a column</a>
 	</div>
       </div>
       <div class="footer">
