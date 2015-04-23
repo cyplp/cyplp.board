@@ -385,7 +385,7 @@ def boardCSS(request):
 
     response = request.response
 
-    response.body = '\n'.join(["\n".join(typeItems), "\n".join(tags)])
+    response.text = '\n'.join(["\n".join(typeItems), "\n".join(tags)])
 
     response.content_type = 'text/css'
     return response
