@@ -58,6 +58,7 @@ def board(request):
 
     columns = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 2}
+    tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 3}
 
     for current in contents:
         if current['key'][1] == 1:
@@ -71,6 +72,7 @@ def board(request):
     return {'columns': columns,
             'board': board,
             'typeItems': typeItems,
+            'tags': tags,
             }
 
 
@@ -378,7 +380,7 @@ def boardCSS(request):
     typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
                  for current in contents if current['key'][1] == 0]
 
-    tags = [".tag_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
+    tags = [".tag_%(_id)s {background-color: %(color)s;}" % {key: value for key, value in current['value'].iteritems()}
                  for current in contents if current['key'][1] == 1]
 
     response = request.response
