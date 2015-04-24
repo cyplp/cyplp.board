@@ -30,10 +30,8 @@
       </select>
     </fieldset>
     <fieldset>
-      <button class="button green">Save</button>
-      <button class="button red" href="#close">
-	Close
-      </button>
+      <button class="button green" type="submit">Save</button>
+      <button class="button red" type="button">Close</button>
     </fieldset>
   </form>
 </div>
