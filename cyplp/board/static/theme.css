@@ -58,6 +58,9 @@ body {
     flex-direction:column;
     -webkit-flex-wrap:wrap;
     flex-wrap:wrap;
+    font-size: 14px;
+    margin: 0px;
+    font-family: "Helvetica Neue", Helvetica,Arial, sans-serif;
 }
 
 .boardForm {
@@ -159,3 +162,29 @@ body {
 .column_number {font-size:smaller;}
 
 .tag {padding: 0.3ex 1ex;}
+
+
+/* copy from bootstap */
+* {
+   box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+
+h1, h2, h3, h4{
+    font-weight: 500;
+}
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size:28px;
+}
+
+h3 {
+    font-size:20px;
+}

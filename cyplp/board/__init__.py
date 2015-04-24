@@ -54,8 +54,8 @@ def main(global_config, **settings):
     config.add_route("account", "/account/{id}")
     config.add_route("updatepassword", "/account/{id}/password")
 
-    config.add_fanstatic_resources(['css.fontawesome.fontawesome',
-                                    ], r'.*\.pt')
+    # config.add_fanstatic_resources(['css.fontawesome.fontawesome',
+    #                                 ], r'.*\.pt')
 
     config.scan()
     return config.make_wsgi_app()
