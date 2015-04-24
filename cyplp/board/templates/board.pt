@@ -31,8 +31,6 @@
 	      <h3 class="item-title">${item['title']}</h3>
 	    </div>
 	    <p>${item['content']}</p>
-
-	    <a class="edit" href="${request.route_path('editItem', idBoard=board._id, idItem=item['_id'])}">edit</a>
 	    <div class='tags' tal:condition="item.get('tags')">
 	      <span tal:repeat="tag item.get('tags')" class="tag tag_${tag}" title="${tags[tag]['name']}"> </span>
 	    </div>
