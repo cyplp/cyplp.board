@@ -17,47 +17,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     for(var item=0, len=columns.length; item<len; item++)
 	{
-	    columns[item].addEventListener('drop', function(event){
-
-		event.preventDefault();
-		var id = event.dataTransfer.getData("text");
-		var from =  event.dataTransfer.getData("from");
-
-
-		var to;
-		if (event.target.className == 'column')
-		    {
-			to = event.target.dataset.column;
-		    }
-		else
-		    {
-			to = event.target.parentNode.dataset.column;
-		    }
-		var target = event.target;
-
-		var req = new XMLHttpRequest();
-		req.open("POST", "/board/"+boardId+"/move/"+id.split("-")[1], true);
-		req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		req.onreadystatechange = function () { if (req.readyState != 4 || req.status != 200) return;
-						       console.log("Success: " + req.responseText); };
-		req.send(JSON.stringify({from: from, to:to}));
-
-
-		if (target.className=="column"){
-		    target.appendChild(document.getElementById(id))
-		}
-		else{
-
-		    if (target.parentNode.className == "column")
-			{
-			    target.parentNode.appendChild(document.getElementById(id))
-			}
-		}
-
-
-	    });
-	    columns[item].addEventListener('dragover', function(e){
-	     							   e.preventDefault();});
+	    columns[item].addEventListener('drop', function(event){drop(event)});
+	    columns[item].addEventListener('dragover', function(event){event.preventDefault();});
 	}
 
     var title = document.getElementById('title-board');
@@ -136,4 +97,46 @@ function dragstart(event){
     event.dataTransfer.effectAllowed = "move";
     event.dataTransfer.setData("text", event.target.id);
     event.dataTransfer.setData("from", column);
+}
+
+
+function drop (event){
+
+    event.preventDefault();
+    var id = event.dataTransfer.getData("text");
+    var from =  event.dataTransfer.getData("from");
+    var boardId = document.getElementById('board').dataset.board;
+    var to;
+
+    if (event.target.className == 'column')
+    {
+	to = event.target.dataset.column;
+    }
+    else
+    {
+	to = event.target.parentNode.dataset.column;
+    }
+
+    var target = event.target;
+
+    var req = new XMLHttpRequest();
+    req.open("POST", "/board/"+boardId+"/move/"+id.split("-")[1], true);
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    req.onreadystatechange = function () { if (req.readyState != 4 || req.status != 200) return;
+					   console.log("Success: " + req.responseText); };
+    req.send(JSON.stringify({from: from, to:to}));
+
+
+    if (target.className=="column"){
+	target.appendChild(document.getElementById(id))
+    }
+    else{
+
+	if (target.parentNode.className == "column")
+	{
+	    target.parentNode.appendChild(document.getElementById(id))
+	}
+    }
+
+
 }
