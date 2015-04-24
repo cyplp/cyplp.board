@@ -264,18 +264,14 @@ def itemTitlePost(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
-
     item = Item.get(itemId)
-    item.title = request.POST.get('title')
+    item.title = request.POST.get('title', '').strip()
 
-    typeItem = request.POST.get('type')
+    item.typeItem = request.POST.get('type')
 
-    tags = request.POST.getall('tags')
+    item.tags = request.POST.getall('tags')
 
-    item.tags = tags
-
-    item.typeItem = typeItem
-
+    item.content = request.POST.get('content', '').strip()
     item.save()
 
     return HTTPFound(location=request.route_path('board', id=boardId))
