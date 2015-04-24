@@ -8,6 +8,19 @@
     -webkit-flex-direction:row;
 }
 
+.main-config
+    {
+	flex-direction:column;
+	-webkit-flex-direction:column;
+	}
+
+.config{
+  padding:auto;
+    }
+
+label {
+    width:15ex;
+    }
 .column {
     background-color:#B8B8B8;
     flex:1;
@@ -117,6 +130,7 @@ body {
     border: none;
     height:4em;
     text-decoration:none;
+    cursor:default;
     }
 
 .button:link {
@@ -223,3 +237,7 @@ h3 {
 fieldset{
  border: none;
 }
+
+.add {
+    font-size:smaller;
+    }

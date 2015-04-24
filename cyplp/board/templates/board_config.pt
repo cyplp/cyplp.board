@@ -10,11 +10,13 @@
     <article>
       <div class="header">
 	<h1 id="title-board" data-board="${board['_id']}">${board.title}</h1>
-	<a href="${request.route_path('home')}">boards list</a>
-	<a href="${request.route_path('board',id=board['_id'])}">back to the board</a>
+	<div class="links">
+	  <a href="${request.route_path('home')}">boards list</a>
+	  <a href="${request.route_path('board',id=board['_id'])}">back to the board</a>
+	</div>
       </div>
-      <div class="main">
-	<div>
+      <div class="main main-config">
+	<div class="config">
 	  <h2>Type Items</h2>
 	  <ul tal:condition='typeItems'>
 	    <li tal:repeat="type typeItems">
@@ -23,7 +25,7 @@
 	    </li>
 	  </ul>
 	  <h3>Add a type</h3>
-	  <form method="POST" name="type">
+	  <form class="add" method="POST" name="type">
 	    <fieldset>
 	      <label for="name">Name</label>:
 	      <input type="text" name="name" id="name" />
@@ -33,10 +35,11 @@
 	      <input type="color" name="color" id="color" value="#FFFFFF"/>
 	    </fieldset>
 	    <input type="hidden" value="type" name="form"/>
-	    <input type="submit" value="Add" />
+	    <button class="button green" type="submit">Add</button>
 	  </form>
 	</div>
-	<div>
+
+	<div class="config">
 	  <h2>Tags</h2>
 	  <ul tal:condition='tags'>
 	    <li tal:repeat="tag tags">
@@ -44,8 +47,9 @@
 	      <span class="tag_${tags[tag]['_id']}">${tags[tag]['color']}</span>
 	    </li>
 	  </ul>
+
 	  <h3>Add a tag</h3>
-	  <form method="POST" name="tag">
+	  <form class="add" method="POST" name="tag">
 	    <fieldset>
 	      <label for="name">Name</label>:
 	      <input type="text" name="name" id="name" />
@@ -55,7 +59,7 @@
 	      <input type="color" name="color" id="color" value="#FFFFFF"/>
 	    </fieldset>
 	    <input type="hidden" value="tag" name="form"/>
-	    <input type="submit" value="Add" />
+	    <button class="button green" type="submit">Add</button>
 	  </form>
 	  </div>
       </div>
