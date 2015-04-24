@@ -1,4 +1,5 @@
 <div class="overlay">
+  <h2>Edit : ${item['title']}</h2>
   <form method="POST" action="${request.route_path('itemTitle', idBoard=item['board'], idItem=item['_id'])}">
     <fieldset>
       <label for="title">Title</label> :
