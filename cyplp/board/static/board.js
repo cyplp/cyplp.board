@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	    columnTitles[item].addEventListener('click', function(event){clickColumnTitle(event)});
 	}
 
+
     var itemTitles = document.querySelectorAll('.item-title');
     for(var item=0, len=itemTitles.length; item<len; item++)
     {
