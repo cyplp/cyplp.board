@@ -372,7 +372,7 @@ def boardConfigPost(request):
              permission="authenticated")
 def boardCSS(request):
     boardId = request.matchdict['id']
-    board = Board.get(boardId)
+
     contents = request.db.view("board/config" ,
                               startkey=[boardId, 0],
                               endkey=[boardId, {}]).all()
