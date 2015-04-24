@@ -13,19 +13,16 @@
 	    <div>
 
 	      <div class="main">
-		<div id="overlay">
+		<div class="overlay" id="new_board">
 		  <form method="POST" action="${request.route_path('addBoard')}" class="boardForm">
 		    <input placeholder="New board..." type="text" name="title"/>
 		    <input type="submit" value="create" class="button"/>
 		    <a class="button" href="#noWhere">
 		      Cancel
 		    </a>
-
 		  </form>
 		</div>
-		<div><a href="#overlay">New board</a></div>
-
-
+		<div><a href="#new_board">New board</a></div>
 		<div>
 		  <ul>
 		    <li tal:repeat='board boards'>
