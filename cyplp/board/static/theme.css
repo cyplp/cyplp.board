@@ -81,11 +81,12 @@ body {
     }
 .overlay {
     margin:auto;
-    padding: 2em 2em 2em 2em;
+    padding: 0em 2em 0em 2em;
     background-color: lightgray;
-    border-radius: 25px;
+    border-radius: Opx;
     width:35em;
-    height:15em;
+    min-height:15em;
+    max-height: 95%;
     position: fixed;
     top: 0;
     right: 0;
@@ -96,6 +97,7 @@ body {
     -webkit-transition: opacity 400ms ease-in;
     -moz-transition: opacity 400ms ease-in;
     transition: opacity 400ms ease-in;
+    box-shadow:5px 5px 50px 2px black;
 }
 
 .button{
@@ -187,4 +189,8 @@ h2 {
 
 h3 {
     font-size:20px;
+}
+
+fieldset{
+ border: none;
 }
