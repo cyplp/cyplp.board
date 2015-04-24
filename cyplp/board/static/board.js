@@ -47,7 +47,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						   req.onreadystatechange = function () {
 						   if (req.readyState != 4 || req.status != 200) return;
-						       event.target.parentNode.outerHTML = req.responseText;
+
+						   event.target.parentNode.outerHTML = req.responseText;
+						   var close = document.getElementById('close');
+						   close.addEventListener('click', function(event) {location.reload()});
 						   };
 
 						   req.send();
