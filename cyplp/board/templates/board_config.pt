@@ -11,6 +11,7 @@
       <div class="header">
 	<h1 id="title-board" data-board="${board['_id']}">${board.title}</h1>
 	<div class="links">
+	  <a href="${request.route_path('account', id=request.session.get('login'))}">my account</a>
 	  <a href="${request.route_path('home')}">boards list</a>
 	  <a href="${request.route_path('board',id=board['_id'])}">back to the board</a>
 	</div>

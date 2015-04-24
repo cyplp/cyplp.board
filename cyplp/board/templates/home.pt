@@ -8,7 +8,9 @@
 	  <article>
 	    <div class="header">
 	      <h1>Select our board</h1>
-	      <a href="${request.route_path('account', id=request.session.get('login'))}">my account</a>
+	      <div class="links">
+		<a href="${request.route_path('account', id=request.session.get('login'))}">my account</a>
+	      </div>
 	    </div>
 	    <div>
 
