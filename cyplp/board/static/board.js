@@ -33,15 +33,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var itemTitles = document.querySelectorAll('.item-title');
     for(var item=0, len=itemTitles.length; item<len; item++)
     {
-    	child = itemTitles[item].firstChild;
+    	var child = itemTitles[item].firstChild;
 
     	if (child.hasChildNodes() == false)
     	    {
-
     		itemTitles[item].addEventListener('click',
     					       function(event){
 						   var itemId = event.target.parentNode.parentNode.id.split('-')[1];
-						   console.log(itemId);
+						   var boardId = document.getElementById('board').dataset.board;
+
 						   var req = new XMLHttpRequest();
 						   req.open("GET", "/board/"+boardId+"/edit/"+itemId+"/title", true);
 						   req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -53,10 +53,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   req.send();
     					       });
     	    }
-    	else
-    	    {
-    		console.log(itemTitles[item]);
-    	    }
+
     }
   });
 
