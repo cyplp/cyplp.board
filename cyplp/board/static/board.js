@@ -22,17 +22,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
     var title = document.getElementById('title-board');
-    title.addEventListener('click', function(event){
-	var req = new XMLHttpRequest();
-	req.open("GET", "/board/"+boardId+"/title", true);
-	req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	req.onreadystatechange = function () {
-	    if (req.readyState != 4 || req.status != 200) return;
-	    event.target.parentNode.outerHTML = req.responseText;
-	};
-
-	req.send();
-    });
+    title.addEventListener('click', function(event){clickBoardTitle(event)});
 
     var columnTitles = document.querySelectorAll('.column-title');
     for(var item=0, len=columnTitles.length; item<len; item++)
@@ -139,4 +129,18 @@ function drop (event){
     }
 
 
+}
+
+function clickBoardTitle(event){
+    var boardId = document.getElementById('board').dataset.board;
+
+    var req = new XMLHttpRequest();
+    req.open("GET", "/board/"+boardId+"/title", true);
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    req.onreadystatechange = function () {
+	if (req.readyState != 4 || req.status != 200) return;
+	event.target.parentNode.outerHTML = req.responseText;
+    };
+
+    req.send();
 }
