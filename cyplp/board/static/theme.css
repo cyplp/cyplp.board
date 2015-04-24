@@ -79,10 +79,11 @@ body {
 #new_board:target{
     display: block;
     }
+
 .overlay {
     margin:auto;
     padding: 0em 2em 0em 2em;
-    background-color: lightgray;
+    background-color: #EFEFEF;
     border-radius: Opx;
     width:35em;
     min-height:15em;
@@ -101,12 +102,30 @@ body {
 }
 
 .button{
-    font-weight: bold;
-    padding: 10px 25px;
-    background-color: white;
-    border-radius: 15px;
+    /* font-weight: bold; */
+    padding: 1ex 1em;
+    background-color: #B8B8B8;
+    border-radius: 0px;
+    border: none;
+    height:4em;
+    text-decoration:none;
     }
 
+.button:link {
+	color:black;
+}
+
+.button:hover {
+	box-shadow:5px 5px 15px 0px black;
+}
+
+.green:hover {
+	 background-color: #9BEF99;
+}
+
+.red:hover {
+	 background-color: #FF978D;
+}
 #addColumn{
     display:none;
     position: fixed;
