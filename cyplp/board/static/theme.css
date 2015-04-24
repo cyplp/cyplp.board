@@ -102,8 +102,8 @@ body {
 }
 
 .button{
-    /* font-weight: bold; */
-    padding: 1ex 1em;
+    font-weight: bold;
+    padding: 0.5ex 2ex;
     background-color: #B8B8B8;
     border-radius: 0px;
     border: none;
