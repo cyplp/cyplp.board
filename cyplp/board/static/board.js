@@ -3,19 +3,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     for (var item = 0, len=addItems.length; item < len; item++)
 	{
-	    addItems[item].addEventListener('click', function(e) {eventAddItems(e)});
+	    addItems[item].addEventListener('click', function(event) {eventAddItems(event)});
 	}
 
     var items = document.querySelectorAll('.item');
     for (var item=0, len=items.length; item<len; item++)
 	{
-	    items[item].addEventListener('dragstart', function(event){
-		var column = event.target.parentNode.dataset.column;
-
-		event.dataTransfer.effectAllowed = "move";
-		event.dataTransfer.setData("text", event.target.id);
-		event.dataTransfer.setData("from", column);
-								 });
+	    items[item].addEventListener('dragstart', function(event){dragstart(event);});
 	}
 
     var columns = document.querySelectorAll('.column');
@@ -126,13 +120,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   });
 
-function eventAddItems(evt)
-    {
+function eventAddItems(evt){
 
-	node = evt.currentTarget;
+	var node = evt.currentTarget;
 
-	form = document.getElementById('addItem-'+node.dataset.column);
+	var form = document.getElementById('addItem-'+node.dataset.column);
 	form.style.display = 'block';
 	form.querySelectorAll('.input')[0].autofocus = "on";
 	node.parentNode.parentNode.style.display = 'none' ;
     }
+
+function dragstart(event){
+    var column = event.target.parentNode.dataset.column;
+
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text", event.target.id);
+    event.dataTransfer.setData("from", column);
+}
