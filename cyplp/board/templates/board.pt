@@ -11,8 +11,10 @@
     <article>
       <div class="header">
 	<h1 id="title-board" data-board="${board['_id']}">${board.title}</h1>
-	<a href="${request.route_path('home')}">boards list</a>
-	<a href="${request.route_path('boardConfig',id=board['_id'])}">Configure this board</a>
+	<div class="links">
+	  <a href="${request.route_path('home')}">boards list</a>
+	  <a href="${request.route_path('boardConfig',id=board['_id'])}">Configure this board</a>
+	</div>
       </div>
       <div class="main" id="board" data-board="${board['_id']}" >
 	<div tal:repeat="column columns.values()"

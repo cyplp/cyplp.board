@@ -23,6 +23,14 @@
 
 }
 
+.links {
+  flex:1;
+  display:-webkit-flex;
+  display: flex;
+  flex-direction:column;
+  -webkit-flex-direction:column;
+  }
+
 .column-title{
 margin-top:0.1ex;
 margin-bottom:1ex;
@@ -153,7 +161,7 @@ body {
 }
 
 [draggable=true]:hover{
-    box-shadow:0 0 5px blue;
+    box-shadow:0 0 5px black;
 }
 
 [draggable=true], [dropzone]{
@@ -185,7 +193,6 @@ body {
 .tag {padding: 0.3ex 1ex;}
 
 
-/* copy from bootstap */
 * {
    box-sizing: border-box;
 }
@@ -200,6 +207,9 @@ h1, h2, h3, h4{
 }
 h1 {
     font-size: 36px;
+    padding-left:1em;
+    font-variant: small-caps;
+    flex:3;
 }
 
 h2 {
