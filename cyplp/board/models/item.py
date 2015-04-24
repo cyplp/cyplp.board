@@ -16,6 +16,12 @@ class Item(couchdbkit.Document):
         except couchdbkit.exceptions.ResourceNotFound:
             return ''
 
+    def getContent(self):
+        try:
+            return self.content
+        except couchdbkit.exceptions.ResourceNotFound:
+            return ''
+
     def getTags(self):
         try:
             return self.tags

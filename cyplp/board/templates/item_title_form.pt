@@ -6,6 +6,10 @@
     </fieldset>
 
     <fieldset>
+      <label for="content">Content</label>:
+      <textarea id="content" name="content">${item.getContent()}</textarea>
+    </fieldset>
+    <fieldset>
       <label for="type">Type</label>:
       <select name="type" id="type">
 	<option></option>
@@ -24,6 +28,11 @@
 		value="${tag}">${tags[tag]['name']}</option>
       </select>
     </fieldset>
-    <input type="submit" value="save" />
+    <fieldset>
+      <input type="submit" value="save" />
+      <a class="button" href="#close">
+	Close
+      </a>
+    </fieldset>
   </form>
 </div>
