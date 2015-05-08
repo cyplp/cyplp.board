@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   });
 
 function eventAddItems(evt){
-
 	var node = evt.currentTarget;
 
 	var form = document.getElementById('addItem-'+node.dataset.column);
@@ -83,7 +82,6 @@ function dragstart(event){
 
 
 function drop (event){
-
     event.preventDefault();
     var id = event.dataTransfer.getData("text");
     var from =  event.dataTransfer.getData("from");
