@@ -52,6 +52,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   event.target.parentNode.outerHTML = req.responseText;
 						   var close = document.getElementById('close');
 						   close.addEventListener('click', function(event) {location.reload()});
+						   var deleteButton = document.getElementById('delete');
+						   deleteButton.addEventListener('click', function(event) {deleteItem(event, itemId, boardId);});
 						   };
 
 						   req.send();
@@ -147,5 +149,17 @@ function clickColumnTitle(event){
 	event.target.parentNode.outerHTML = req.responseText;
     };
 
+    req.send();
+}
+
+function deleteItem(event, itemId, boardId){
+    var req = new XMLHttpRequest();
+
+    req.open("DELETE", "/board/"+boardId+"/delete/"+itemId, true);
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    req.onreadystatechange = function () {
+	if (req.readyState != 4 || req.status != 200) return;
+	location.reload();
+    }
     req.send();
 }

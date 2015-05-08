@@ -385,3 +385,19 @@ def boardCSS(request):
 
     response.content_type = 'text/css'
     return response
+
+
+@view_config(route_name="deleteItem", request_method="DELETE",
+             permission="authenticated", renderer='json')
+def deleteItem(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = Item.get(itemId)
+
+    if boardId != item.board:
+        # TODO 404
+        return {"status": "ko"}
+
+    item.delete()
+    return {"status": "ok"}

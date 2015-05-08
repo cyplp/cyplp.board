@@ -48,6 +48,7 @@ def main(global_config, **settings):
     config.add_route('columnTitle', '/board/{idBoard}/column/{idColumn}/title')
     config.add_route('moveItem', '/board/{idBoard}/move/{idItem}')
     config.add_route('editItem', '/board/{idBoard}/edit/{idItem}')
+    config.add_route('deleteItem', '/board/{idBoard}/delete/{idItem}')
     config.add_route('itemTitle', '/board/{idBoard}/edit/{idItem}/title')
     config.add_route('editItemContent', '/board/{idBoard}/edit/{idItem}/content')
     config.add_route('saveItemContent', '/board/{idBoard}/save/{idItem}/content')

@@ -32,6 +32,8 @@
     <fieldset>
       <button class="button green" type="submit">Save</button>
       <button id="close" class="button red close" type="button">Close</button>
+      <button id="delete" class="button red delete" type="button">Delete</button>
     </fieldset>
   </form>
+
 </div>
