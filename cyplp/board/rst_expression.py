@@ -10,6 +10,8 @@ from chameleon.tales import StructureExpr
 from chameleon.utils import unicode_string
 from chameleon.astutil import Symbol
 
+# TODO explode this file in files and make as lib
+
 # Stole from https://raw.githubusercontent.com/pypa/readme/master/readme/rst.py
 class RSTHTMLTranslator(HTMLTranslator):
     """
@@ -37,8 +39,7 @@ class RSTHTMLTranslator(HTMLTranslator):
         self.body.append(self.context.pop())
 
     def visit_title(self, node):
-        """Only 6 section levels are supported by HTML."""
-        check_id = 0 # TODO: is this a bool (False) or a counter?
+        """Only 3 section levels are supported by for this application."""
         close_tag = '</p>\n'
         if isinstance(node.parent, nodes.topic):
             self.body.append(self.starttag(node, 'p', '', CLASS='topic-title first'))
@@ -75,6 +76,8 @@ class RSTHTMLTranslator(HTMLTranslator):
 
 
 SETTINGS = {
+    # see http://sourceforge.net/p/docutils/code/HEAD/tree/trunk/docutils/docutils/writers/html4css1/__init__.py#l57
+
     # Cloaking email addresses provides a small amount of additional
     # privacy protection for email addresses inside of a chunk of ReST.
     "cloak_email_addresses": True,
