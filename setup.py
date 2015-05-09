@@ -22,8 +22,8 @@ requires = [
     'pyramid_mailer',
     'js.jquery',
     'fanstatic',
-    'docutils',
     'pyramid_auth',
+    'readme',
     ]
 
 setup(name='cyplp.board',

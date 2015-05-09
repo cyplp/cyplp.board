@@ -18,6 +18,7 @@ from cyplp.board.models import TypeItem
 from cyplp.board.models import User
 from cyplp.board.models import Tag
 
+from cyplp.board.rst_expression import RSTExpression
 
 @subscriber(ApplicationCreated)
 def application_created_subscriber(event):
@@ -68,6 +69,9 @@ def board(request):
                 columns[tmp['column']]['items'] = []
 
             columns[tmp['column']]['items'].append(tmp)
+
+    from chameleon import PageTemplateFile
+    PageTemplateFile.expression_types['rst'] = RSTExpression
 
     return {'columns': columns,
             'board': board,
