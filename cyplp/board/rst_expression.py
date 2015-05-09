@@ -6,6 +6,8 @@ from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
 
+from chameleon.tales import StructureExpr
+from chameleon.codegen import template
 
 # Stole from https://raw.githubusercontent.com/pypa/readme/master/readme/rst.py
 class RSTHTMLTranslator(HTMLTranslator):
@@ -106,10 +108,13 @@ def render(raw, stream=None):
 
     return rendered or raw, bool(rendered)
 
-def RSTExpression(string):
-    def compiler(target, engine):
-        tmp = render(string)[0]
+class RSTExpression(StructureExpr):
+    def __call__(self, target, engine):
+        tmp = render(self.expression)[0]
         value = ast.Str(tmp)
+        compiler = engine.parse(self.expression)
+        body = compiler.assign_value(target)
+        return body + template("from cyplp.board.rst_expression import render; render(target)", target=target)
         return [ast.Assign(targets=[target], value=value)]
 
-    return compiler
+    # return compiler
