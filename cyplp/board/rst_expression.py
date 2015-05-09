@@ -1,13 +1,13 @@
 import os.path
 import StringIO
-import ast
 
 from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
 
 from chameleon.tales import StructureExpr
-from chameleon.codegen import template
+from chameleon.utils import unicode_string
+from chameleon.astutil import Symbol
 
 # Stole from https://raw.githubusercontent.com/pypa/readme/master/readme/rst.py
 class RSTHTMLTranslator(HTMLTranslator):
@@ -108,13 +108,18 @@ def render(raw, stream=None):
 
     return rendered or raw, bool(rendered)
 
-class RSTExpression(StructureExpr):
-    def __call__(self, target, engine):
-        tmp = render(self.expression)[0]
-        value = ast.Str(tmp)
-        compiler = engine.parse(self.expression)
-        body = compiler.assign_value(target)
-        return body + template("from cyplp.board.rst_expression import render; render(target)", target=target)
-        return [ast.Assign(targets=[target], value=value)]
+class RST(object):
+    def __init__(self, value):
+        self.done = self.transform(value)
 
-    # return compiler
+    def __str__(self):
+        return unicode_string(self.done)
+
+    __html__ = __repr__ = __str__
+
+    @classmethod
+    def transform(cls, value):
+        return render(value)[0]
+
+class RSTExpression(StructureExpr):
+    wrapper_class = Symbol(RST)
