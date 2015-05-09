@@ -4,6 +4,7 @@ import StringIO
 from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
+from docutils import nodes
 
 from chameleon.tales import StructureExpr
 from chameleon.utils import unicode_string
@@ -35,6 +36,43 @@ class RSTHTMLTranslator(HTMLTranslator):
             self.body.append(self.starttag(node, "img", **atts))
         self.body.append(self.context.pop())
 
+    def visit_title(self, node):
+        """Only 6 section levels are supported by HTML."""
+        check_id = 0 # TODO: is this a bool (False) or a counter?
+        close_tag = '</p>\n'
+        if isinstance(node.parent, nodes.topic):
+            self.body.append(self.starttag(node, 'p', '', CLASS='topic-title first'))
+        elif isinstance(node.parent, nodes.sidebar):
+            self.body.append(self.starttag(node, 'p', '', CLASS='sidebar-title'))
+        elif isinstance(node.parent, nodes.Admonition):
+            self.body.append(self.starttag(node, 'p', '', CLASS='admonition-title'))
+        elif isinstance(node.parent, nodes.table):
+            self.body.append(self.starttag(node, 'caption', ''))
+            close_tag = '</caption>\n'
+        elif isinstance(node.parent, nodes.document):
+            self.body.append(self.starttag(node, 'h3', '', CLASS='title'))
+            close_tag = '</h3>\n'
+            self.in_document_title = len(self.body)
+        else:
+            assert isinstance(node.parent, nodes.section)
+            h_level = self.section_level + self.initial_header_level - 1
+            atts = {}
+
+            if (len(node.parent) >= 2 and isinstance(node.parent[1], nodes.subtitle)):
+                atts['CLASS'] = 'with-subtitle'
+                self.body.append(self.starttag(node, 'h%s' % h_level, '', **atts))
+            atts = {}
+            if node.hasattr('refid'):
+                atts['class'] = 'toc-backref'
+                atts['href'] = '#' + node['refid']
+            if atts:
+                self.body.append(self.starttag({}, 'a', '', **atts))
+                close_tag = '</a></h%s>\n' % (h_level)
+            else:
+                close_tag = '</h%s>\n' % (h_level)
+        self.context.append(close_tag)
+
+
 
 SETTINGS = {
     # Cloaking email addresses provides a small amount of additional
@@ -52,7 +90,7 @@ SETTINGS = {
     "sectsubtitle_xform": True,
 
     # Set our initial header level
-    "initial_header_level": 2,
+    "initial_header_level": 3,
 
     # Prevent local files from being included into the rendered output.
     # This is a security concern because people can insert files
