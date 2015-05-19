@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
 from pyramid.events import ApplicationCreated
-
+from pyramid.security import forget
 import bcrypt
 import couchdbkit
 
@@ -408,3 +408,20 @@ def deleteItem(request):
 @view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
 def loginGet(request):
     return {}
+
+@view_config(route_name='login', request_method='POST')
+def loginPost(request):
+    login = request.POST.get("login", '')
+    password = request.POST.get("password", '')
+
+    if (validate(request, login, password)):
+        logging.info("%s logged", login)
+        return HTTPFound(request.route_path('home'))
+    else:
+        logging.info("%s failed", login)
+        return HTTPFound(request.route_path('login'))
+
+@view_config(route_name='logout', request_method='GET')
+def logout(request):
+    forget(request)
+    return HTTPFound(request.route_path('login'))
