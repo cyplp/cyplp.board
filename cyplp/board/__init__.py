@@ -1,7 +1,12 @@
 from pyramid.config import Configurator
 from pyramid.security import Authenticated, Allow
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
+from pyramid.authentication import AuthTktAuthenticationPolicy
+
 from couchdbkit import Server
+
+from cyplp.board.views import callback
 
 
 class RootFactory(object):
@@ -19,6 +24,11 @@ def main(global_config, **settings):
 
     my_session_factory = SignedCookieSessionFactory(settings['secret'])
     config.set_session_factory(my_session_factory)
+
+    config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.set_authentication_policy(AuthTktAuthenticationPolicy('plop',
+                                                                 callback=callback,
+                                                                 hashalg='sha512'))
 
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
