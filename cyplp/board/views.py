@@ -171,7 +171,6 @@ def validate(request, login, password):
     return True
 
 def callback(uid, *args, **kw):
-
     return []
 
 @view_config(route_name='admin', renderer="templates/admin.pt", request_method="GET", permission="authenticated")
@@ -405,3 +404,7 @@ def deleteItem(request):
 
     item.delete()
     return {"status": "ok"}
+
+@view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
+def loginGet(request):
+    return {}

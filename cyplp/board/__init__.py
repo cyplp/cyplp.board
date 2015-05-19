@@ -24,7 +24,7 @@ def main(global_config, **settings):
                     'pyramid_chameleon',
                     'pyramid_mako',
                     'rebecca.fanstatic',
-                    'pyramid_auth',]:
+                  ]:
         config.include(include)
 
     config.registry.db = Server(uri=settings['couchdb.uri'])
@@ -38,6 +38,8 @@ def main(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('admin', '/admin')
+    config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
     config.add_route('board', '/board/{id}')
     config.add_route('addBoard', '/add/board')
     config.add_route('boardTitle', '/board/{id}/title')
