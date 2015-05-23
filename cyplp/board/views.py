@@ -430,6 +430,6 @@ def loginPost(request):
 def logout(request):
     # import pdb
     # pdb.set_trace()
-    forget(request)
+    headers = forget(request)
 
-    return HTTPFound(request.route_path('login'))
+    return HTTPFound(request.route_path('login'), headers=headers)
