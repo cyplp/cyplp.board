@@ -1,12 +1,15 @@
 import logging
 
 from pyramid.view import view_config
+from pyramid.view import forbidden_view_config
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
 from pyramid.events import ApplicationCreated
 from pyramid.security import forget
+from pyramid.security import remember
 import bcrypt
 import couchdbkit
 
@@ -406,6 +409,7 @@ def deleteItem(request):
     return {"status": "ok"}
 
 @view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
+@forbidden_view_config(renderer='templates/login.pt')
 def loginGet(request):
     return {}
 
@@ -416,12 +420,16 @@ def loginPost(request):
 
     if (validate(request, login, password)):
         logging.info("%s logged", login)
-        return HTTPFound(request.route_path('home'))
+        headers = remember(request, login)
+        return HTTPFound(request.route_path('home'), headers=headers)
     else:
         logging.info("%s failed", login)
         return HTTPFound(request.route_path('login'))
 
 @view_config(route_name='logout', request_method='GET')
 def logout(request):
+    # import pdb
+    # pdb.set_trace()
     forget(request)
+
     return HTTPFound(request.route_path('login'))

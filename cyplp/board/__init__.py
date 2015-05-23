@@ -22,13 +22,15 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings, root_factory=RootFactory)
 
-    my_session_factory = SignedCookieSessionFactory(settings['secret'])
-    config.set_session_factory(my_session_factory)
 
-    config.set_authorization_policy(ACLAuthorizationPolicy())
+    my_session_factory = SignedCookieSessionFactory(settings['secret']) #
+    config.set_session_factory(my_session_factory)                      #
+
     config.set_authentication_policy(AuthTktAuthenticationPolicy('plop',
                                                                  callback=callback,
                                                                  hashalg='sha512'))
+
+    config.set_authorization_policy(ACLAuthorizationPolicy())
 
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
