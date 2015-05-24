@@ -418,18 +418,22 @@ def loginPost(request):
     login = request.POST.get("login", '')
     password = request.POST.get("password", '')
 
+    login_path = request.route_url('login')
+    referrer = request.environ['HTTP_REFERER'] #  security issue ?
+
+    if referrer == login_path:
+        referrer = '/'
+
     if (validate(request, login, password)):
         logging.info("%s logged", login)
         headers = remember(request, login)
-        return HTTPFound(request.route_path('home'), headers=headers)
+        return HTTPFound(referrer, headers=headers)
     else:
         logging.info("%s failed", login)
         return HTTPFound(request.route_path('login'))
 
 @view_config(route_name='logout', request_method='GET')
 def logout(request):
-    # import pdb
-    # pdb.set_trace()
     headers = forget(request)
 
     return HTTPFound(request.route_path('login'), headers=headers)
