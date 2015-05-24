@@ -1,5 +1,5 @@
 import os.path
-import StringIO
+import io
 
 from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
@@ -24,7 +24,7 @@ class RSTHTMLTranslator(HTMLTranslator):
         if ext == ".svg":
             # preserve essential attributes
             atts = {}
-            for attribute, value in node.attributes.items():
+            for attribute, value in list(node.attributes.items()):
                 # we have no time for empty values
                 if value:
                     if attribute == "uri":
@@ -132,7 +132,7 @@ def render(raw, stream=None):
     if stream is None:
         # Use a io.StringIO as the warning stream to prevent warnings from
         # being printed to sys.stderr.
-        stream = StringIO.StringIO()
+        stream = io.StringIO()
 
     settings = SETTINGS.copy()
     settings["warning_stream"] = stream

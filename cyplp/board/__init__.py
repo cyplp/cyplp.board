@@ -40,7 +40,7 @@ def main(global_config, **settings):
                   ]:
         config.include(include)
 
-    config.registry.db = pycouchdb.Server(uri=settings['couchdb.uri'])
+    config.registry.db = pycouchdb.Server(settings['couchdb.uri'])
 
     def add_couchdb(request):
         db = config.registry.db.database(settings['couchdb.db'])
