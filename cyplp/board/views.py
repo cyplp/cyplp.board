@@ -142,7 +142,7 @@ def moveItem(request):
 @view_config(route_name="editItem", renderer="templates/edit.pt", permission="authenticated")
 def editItem(request):
     boardId = request.matchdict['idBoard']
-    item = Item.get(request.matchdict['idItem'])
+    item = request.db.get(request.matchdict['idItem'])
 
     if item.board == request.matchdict['idBoard']:
         return {'item': item}
@@ -152,7 +152,7 @@ def editItem(request):
 @view_config(route_name="editItemContent", renderer="templates/edit_content.pt",
              request_method="GET", permission="authenticated")
 def editItemContentGet(request):
-    item = Item.get(request.matchdict['idItem'])
+    item = request.db.get(request.matchdict['idItem'])
 
     if item.board == request.matchdict['idBoard']:
         return {'item': item}
@@ -259,16 +259,16 @@ def itemTitleGet(request):
     itemId = request.matchdict['idItem']
 
 
-    contents = request.db.view("board/config" ,
+    tmp = request.db.query("board/config" ,
                               startkey=[boardId, 0],
-                              endkey=[boardId, {}]).all()
-
+                              endkey=[boardId, {}])
+    contents = [current for current in tmp]
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
 
     try:
-        item = Item.get(itemId)
-    except couchdbkit.exceptions.ResourceNotFound:
+        item = request.db.get(itemId)
+    except: #  better exception 404.
         return HTTPNotFound()
 
     return {'item': item,
@@ -282,15 +282,15 @@ def itemTitlePost(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
-    item = Item.get(itemId)
-    item.title = request.POST.get('title', '').strip()
+    item = request.db.get(itemId)
+    item['title'] = request.POST.get('title', '').strip()
 
-    item.typeItem = request.POST.get('type')
+    item['typeItem'] = request.POST.get('type', '')
 
-    item.tags = request.POST.getall('tags')
+    item['tags'] = request.POST.getall('tags')
 
-    item.content = request.POST.get('content', '').strip()
-    item.save()
+    item['content'] = request.POST.get('content', '').strip()
+    request.db.save(item)
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 

@@ -8,14 +8,14 @@
 
     <fieldset>
       <label for="content">Content</label>:
-      <textarea id="content" name="content">${item.getContent()}</textarea>
+      <textarea id="content" name="content">${item.get('content', '')}</textarea>
     </fieldset>
     <fieldset>
       <label for="type">Type</label>:
       <select name="type" id="type">
 	<option></option>
 	<option tal:repeat="type typeItems"
-		tal:attributes="selected item.getType() == type"
+		tal:attributes="selected item.get('typeItem', '') == type"
 		class="type_${type}"
 		value="${type}">${typeItems[type]['name']}</option>
       </select>
@@ -24,7 +24,7 @@
       <label for="tags">Tags</label>:
       <select name="tags" id="tags" tal:condition="tags" multiple="true" id="tags">
 	<option tal:repeat="tag tags"
-		tal:attributes="selected tag in item.getTags()"
+		tal:attributes="selected tag in item.get('tags', [])"
 		class="tag_${tag}"
 		value="${tag}">${tags[tag]['name']}</option>
       </select>
