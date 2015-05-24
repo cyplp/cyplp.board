@@ -94,8 +94,10 @@ def addColumn(request):
     boardId = request.matchdict['id']
     title = request.POST.get('title', None)
     if title:
-        column = Column(title=title.strip(), board=boardId.strip())
-        column.save()
+        column = {'title': title.strip(),
+                  'board': boardId.strip(),
+                  'doc_type': 'Column'}
+        request.db.save(column)
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
