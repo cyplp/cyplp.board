@@ -17,9 +17,9 @@ requires = [
     'rebecca.fanstatic',
     'py-bcrypt',
     'fanstatic',
-    # 'pyramid_auth',
     'docutils',
-    'aiocouchdb',
+    'aiopyramid',
+    'pycouchdb',
     ]
 
 setup(name='cyplp.board',

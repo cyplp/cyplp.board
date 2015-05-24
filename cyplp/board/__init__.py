@@ -4,7 +4,8 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.authentication import AuthTktAuthenticationPolicy
 
-from couchdbkit import Server
+import pycouchdb
+
 
 from cyplp.board.views import callback
 
@@ -39,10 +40,10 @@ def main(global_config, **settings):
                   ]:
         config.include(include)
 
-    config.registry.db = Server(uri=settings['couchdb.uri'])
+    config.registry.db = pycouchdb.Server(uri=settings['couchdb.uri'])
 
     def add_couchdb(request):
-        db = config.registry.db.get_or_create_db(settings['couchdb.db'])
+        db = config.registry.db.database(settings['couchdb.db'])
         return db
 
     config.add_request_method(add_couchdb, 'db', reify=True)

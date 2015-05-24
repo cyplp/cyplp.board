@@ -11,29 +11,29 @@ from pyramid.events import ApplicationCreated
 from pyramid.security import forget
 from pyramid.security import remember
 import bcrypt
-import couchdbkit
+#import couchdbkit
 
 
-from cyplp.board.models import Board
-from cyplp.board.models import Column
-from cyplp.board.models import Item
-from cyplp.board.models import TypeItem
-from cyplp.board.models import User
-from cyplp.board.models import Tag
+# from cyplp.board.models import Board
+# from cyplp.board.models import Column
+# from cyplp.board.models import Item
+# from cyplp.board.models import TypeItem
+# from cyplp.board.models import User
+# from cyplp.board.models import Tag
 
 from cyplp.board.rst_expression import RSTExpression
 
-@subscriber(ApplicationCreated)
-def application_created_subscriber(event):
-    registry = event.app.registry
-    db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
+# @subscriber(ApplicationCreated)
+# def application_created_subscriber(event):
+#     registry = event.app.registry
+#     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
 
-    for schema in [Board, Column, Item, TypeItem, User, Tag]:
-        schema.set_db(db)
+#     for schema in [Board, Column, Item, TypeItem, User, Tag]:
+#         schema.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
 def home(request):
-    boards = request.db.view("board/all").all()
+    boards = request.db.query("board/all")
 
     return {'boards': boards}
 
@@ -309,17 +309,17 @@ def updatepasswordPOST(request):
 
     if not password:
         # todo flash
-        print "empty password"
+        print("empty password")
         return HTTPFound(location=request.route_path('account', id=user['_id']))
 
     if not (password == repeat):
         # todo flash
-        print "mismatch password"
+        print("mismatch password")
         return HTTPFound(location=request.route_path('account', id=user['_id']))
 
     if not validate(request, user._id, old):
         # todo flash
-        print "old one password"
+        print("old one password")
         return HTTPFound(location=request.route_path('account', id=user['_id']))
 
     password = bcrypt.hashpw(password.encode('utf-8'),
