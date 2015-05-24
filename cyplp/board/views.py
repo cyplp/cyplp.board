@@ -58,11 +58,11 @@ def addBoard(request):
 def board(request):
 
     boardId = request.matchdict['id']
-    board = Board.get(boardId)
+    board = request.db.get(boardId)
 
-    contents = request.db.view("board/content" ,
+    contents = request.db.query("board/content" ,
                               startkey=[boardId, 0],
-                              endkey=[boardId, {}]).all()
+                              endkey=[boardId, {}])
 
     columns = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 2}
