@@ -379,9 +379,9 @@ def boardConfigPost(request):
 def boardCSS(request):
     boardId = request.matchdict['id']
 
-    contents = request.db.view("board/config" ,
+    contents = request.db.query("board/config" ,
                               startkey=[boardId, 0],
-                              endkey=[boardId, {}]).all()
+                              endkey=[boardId, {}])
 
     typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
                  for current in contents if current['key'][1] == 0]
@@ -391,7 +391,7 @@ def boardCSS(request):
 
     response = request.response
 
-    response.text = unicode('\n'.join(["\n".join(typeItems), "\n".join(tags)]))
+    response.text = '\n'.join(["\n".join(typeItems), "\n".join(tags)])
 
     response.content_type = 'text/css'
     return response
