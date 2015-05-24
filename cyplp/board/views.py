@@ -297,15 +297,15 @@ def itemTitlePost(request):
 
 @view_config(route_name="account", renderer="templates/account.pt", request_method="GET", permission="authenticated")
 def accountGET(request):
-    user = User.get(request.matchdict['id'])
+    user = request.db.get(request.matchdict['id'])
     return {'user': user}
 
 @view_config(route_name="account", request_method="POST", permission="authenticated")
 def accountPOST(request):
 
-    user = User.get(request.matchdict['id'])
-    user.name = request.POST.get('name')
-    user.save()
+    user = request.db.get(request.matchdict['id'])
+    user['name'] = request.POST.get('name', '').strip()
+    request.db.save(user)
 
     return HTTPFound(location=request.route_path('account', id=user['_id']))
 
