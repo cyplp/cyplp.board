@@ -41,11 +41,15 @@ def home(request):
 def addBoard(request):
     title = request.POST.get('title', None)
 
+    # TODO userid
+    owner = 'cyp'
+
     if title:
-        board = Board(title=title,
-                      owner='cyp')
-        board.save()
-        logging.info("%s board saved", title)
+        doc = request.db.save({'title': title,
+                               'owner': owner,
+                               'doc_type': 'Board'})
+
+        logging.info("%s board saved on %s", title, doc['_id'])
 
     return HTTPFound(location=request.route_path('home'))
 
