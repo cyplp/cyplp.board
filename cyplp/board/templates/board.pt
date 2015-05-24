@@ -33,7 +33,7 @@
 	    <div>
 	      <h3 class="item-title">${item['title']}</h3>
 	    </div>
-	    <p tal:condition="item['content']" >${rst: item['content']}</p>
+	    <p tal:condition="item.get('content', '')" >${rst: item['content']}</p>
 	    <div class='tags' tal:condition="item.get('tags')">
 	      <span tal:repeat="tag item.get('tags')" class="tag tag_${tag}" title="${tags[tag]['name']}"> </span>
 	    </div>

@@ -109,10 +109,14 @@ def addItem(request):
     title = request.POST.get('title', None)
 
     if title:
-        item = Item(title=title.strip(),
-                    board=boardId,
-                    column=columnId)
-        item.save()
+        item = {'title': title.strip(),
+                'board': boardId,
+                'column': columnId,
+                'content': '',
+                'doc_type': 'Item',
+                }
+        request.db.save(item)
+
     return HTTPFound(location=request.route_path('board', id=boardId))
 
 @view_config(route_name='moveItem', renderer="json", permission="authenticated")
