@@ -173,7 +173,7 @@ def editItemContentPost(request):
 
 def validate(request, login, password):
     try:
-        user = User.get(login)
+        user = request.db.get(login)
     except couchdbkit.exceptions.ResourceNotFound:
         return False
     if bcrypt.hashpw(password.encode('utf-8'),
@@ -232,7 +232,8 @@ def boardTitlePost(request):
 
     return HTTPFound(location=request.route_path('board', id=board['_id']))
 
-@view_config(route_name="columnTitle", renderer="templates/column_title_form.pt", request_method="GET", permission="authenticated")
+@view_config(route_name="columnTitle", renderer="templates/column_title_form.pt",
+             request_method="GET", permission="authenticated")
 def columnTitleGet(request):
     boardId = request.matchdict['idBoard']
     columnId = request.matchdict['idColumn']
@@ -253,7 +254,8 @@ def columnTitlePost(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name="itemTitle", renderer="templates/item_title_form.pt", request_method="GET", permission="authenticated")
+@view_config(route_name="itemTitle", renderer="templates/item_title_form.pt",
+             request_method="GET", permission="authenticated")
 def itemTitleGet(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
@@ -295,7 +297,8 @@ def itemTitlePost(request):
     return HTTPFound(location=request.route_path('board', id=boardId))
 
 
-@view_config(route_name="account", renderer="templates/account.pt", request_method="GET", permission="authenticated")
+@view_config(route_name="account", renderer="templates/account.pt",
+             request_method="GET", permission="authenticated")
 def accountGET(request):
     user = request.db.get(request.matchdict['id'])
     return {'user': user}
@@ -313,7 +316,7 @@ def accountPOST(request):
 @view_config(route_name="updatepassword", request_method="POST", permission="authenticated")
 def updatepasswordPOST(request):
 
-    user = User.get(request.matchdict['id'])
+    user = request.db.get(request.matchdict['id'])
 
     old = request.POST.get("old_password")
     password = request.POST.get("password")
@@ -337,9 +340,9 @@ def updatepasswordPOST(request):
     password = bcrypt.hashpw(password.encode('utf-8'),
                              bcrypt.gensalt())
 
-    user.password = password
+    user['password'] = password
 
-    user.save()
+    request.db.save(user)
     # todo flash
     return HTTPFound(location=request.route_path('account', id=user['_id']))
 
@@ -411,13 +414,14 @@ def deleteItem(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
-    item = Item.get(itemId)
+    item = request.db.get(itemId)
 
     if boardId != item.board:
         # TODO 404
         return {"status": "ko"}
 
-    item.delete()
+    request.db.delete(item['_id'])
+
     return {"status": "ok"}
 
 @view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
