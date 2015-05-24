@@ -124,17 +124,17 @@ def moveItem(request):
     """
     """
     # TODO schema ?
-    item = Item.get(request.matchdict['idItem'])
+    item = request.db.get(request.matchdict['idItem'])
 
     from_ = request.json_body.get('from')
     to = request.json_body.get('to')
 
     if not from_ or not to:
         return HTTPBadRequest("missing from or to")
-    if item.board == request.matchdict['idBoard']:
-        if item.column == from_:
-            item.column = to
-            item.save()
+    if item['board'] == request.matchdict['idBoard']:
+        if item['column'] == from_:
+            item['column'] = to
+            request.db.save(item)
             return "ok"
 
     return "ko"
