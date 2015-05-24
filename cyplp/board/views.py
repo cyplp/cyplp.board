@@ -229,7 +229,7 @@ def columnTitleGet(request):
     boardId = request.matchdict['idBoard']
     columnId = request.matchdict['idColumn']
 
-    column = Column.get(columnId)
+    column = request.db.get(columnId)
 
     return {'column': column}
 
@@ -238,10 +238,10 @@ def columnTitlePost(request):
     boardId = request.matchdict['idBoard']
     columnId = request.matchdict['idColumn']
 
-    column = Column.get(columnId)
-    column.title = request.POST.get('title')
+    column = request.db.get(columnId)
+    column['title'] = request.POST.get('title')
 
-    column.save()
+    request.db.save(column)
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
