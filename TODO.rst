@@ -16,3 +16,7 @@ Login referer
 -------------
 HTTP referer on login : Could be forge ?
 
+
+Account
+-------
+restrict visiblity to owner and admin
