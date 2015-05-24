@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <title>WiP</title>
+    <link href="${request.static_url('cyplp.board:static/theme.css')}" rel="stylesheet"></link>
+  </head>
+  <body>
+    <article>
+      <div class="overlay">
+	<form method="POST" action="${request.route_path('login')}">
+	  <fieldset>
+	    <label for="login">Login</label> :
+	    <input type="text" name="login" autofocus="on" id="login"/>
+	  </fieldset>
+	  <fieldset>
+	    <label for="password">Password</label> :
+	    <input type="password" name="password" id="password"/>
+	  </fieldset>
+	  <button class="button" type="submit" >Login !</button>
+	</form>
+      </div>
+    </article>
+  </body>
+</html>

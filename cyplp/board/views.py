@@ -1,12 +1,15 @@
 import logging
 
 from pyramid.view import view_config
+from pyramid.view import forbidden_view_config
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
 from pyramid.events import ApplicationCreated
-
+from pyramid.security import forget
+from pyramid.security import remember
 import bcrypt
 import couchdbkit
 
@@ -171,7 +174,6 @@ def validate(request, login, password):
     return True
 
 def callback(uid, *args, **kw):
-
     return []
 
 @view_config(route_name='admin', renderer="templates/admin.pt", request_method="GET", permission="authenticated")
@@ -405,3 +407,33 @@ def deleteItem(request):
 
     item.delete()
     return {"status": "ok"}
+
+@view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
+@forbidden_view_config(renderer='templates/login.pt')
+def loginGet(request):
+    return {}
+
+@view_config(route_name='login', request_method='POST')
+def loginPost(request):
+    login = request.POST.get("login", '')
+    password = request.POST.get("password", '')
+
+    login_path = request.route_url('login')
+    referrer = request.environ['HTTP_REFERER'] #  security issue ?
+
+    if referrer == login_path:
+        referrer = '/'
+
+    if (validate(request, login, password)):
+        logging.info("%s logged", login)
+        headers = remember(request, login)
+        return HTTPFound(referrer, headers=headers)
+    else:
+        logging.info("%s failed", login)
+        return HTTPFound(request.route_path('login'))
+
+@view_config(route_name='logout', request_method='GET')
+def logout(request):
+    headers = forget(request)
+
+    return HTTPFound(request.route_path('login'), headers=headers)

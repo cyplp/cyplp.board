@@ -1,7 +1,12 @@
 from pyramid.config import Configurator
 from pyramid.security import Authenticated, Allow
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
+from pyramid.authentication import AuthTktAuthenticationPolicy
+
 from couchdbkit import Server
+
+from cyplp.board.views import callback
 
 
 class RootFactory(object):
@@ -17,14 +22,21 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings, root_factory=RootFactory)
 
-    my_session_factory = SignedCookieSessionFactory(settings['secret'])
-    config.set_session_factory(my_session_factory)
+
+    my_session_factory = SignedCookieSessionFactory(settings['secret']) #
+    config.set_session_factory(my_session_factory)                      #
+
+    config.set_authentication_policy(AuthTktAuthenticationPolicy('plop',
+                                                                 callback=callback,
+                                                                 hashalg='sha512'))
+
+    config.set_authorization_policy(ACLAuthorizationPolicy())
 
     for include in ['pyramid_fanstatic',
                     'pyramid_chameleon',
                     'pyramid_mako',
                     'rebecca.fanstatic',
-                    'pyramid_auth',]:
+                  ]:
         config.include(include)
 
     config.registry.db = Server(uri=settings['couchdb.uri'])
@@ -38,6 +50,8 @@ def main(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('admin', '/admin')
+    config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
     config.add_route('board', '/board/{id}')
     config.add_route('addBoard', '/add/board')
     config.add_route('boardTitle', '/board/{id}/title')
