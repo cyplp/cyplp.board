@@ -60,9 +60,11 @@ def board(request):
     boardId = request.matchdict['id']
     board = request.db.get(boardId)
 
-    contents = request.db.query("board/content" ,
+    tmp = request.db.query("board/content" ,
                               startkey=[boardId, 0],
                               endkey=[boardId, {}])
+
+    contents = [current for current in tmp]
 
     columns = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 2}
