@@ -11,6 +11,10 @@ from pyramid.events import ApplicationCreated
 from pyramid.security import forget
 from pyramid.security import remember
 import bcrypt
+
+# import asyncio
+
+# from aiopyramid.helpers import synchronize
 #import couchdbkit
 
 
@@ -119,22 +123,27 @@ def addItem(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name='moveItem', renderer="json", permission="authenticated")
+
+@view_config(route_name='moveItem', renderer='json', permission='authenticated')
 def moveItem(request):
     """
     """
-    # TODO schema ?
-    item = request.db.get(request.matchdict['idItem'])
+    logging.info("here 0")
 
+    item = request.db.get(request.matchdict['idItem'])
     from_ = request.json_body.get('from')
+
     to = request.json_body.get('to')
+
 
     if not from_ or not to:
         return HTTPBadRequest("missing from or to")
+
     if item['board'] == request.matchdict['idBoard']:
         if item['column'] == from_:
             item['column'] = to
             request.db.save(item)
+
             return "ok"
 
     return "ko"

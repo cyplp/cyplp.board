@@ -1,8 +1,11 @@
+import logging
+
 from pyramid.config import Configurator
 from pyramid.security import Authenticated, Allow
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.authentication import AuthTktAuthenticationPolicy
+
 
 import pycouchdb
 
@@ -21,6 +24,11 @@ class RootFactory(object):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    # support logging in python3
+    logging.config.fileConfig(
+        settings['logging.config'],
+        disable_existing_loggers=False
+    )
     config = Configurator(settings=settings, root_factory=RootFactory)
 
 
@@ -33,7 +41,8 @@ def main(global_config, **settings):
 
     config.set_authorization_policy(ACLAuthorizationPolicy())
 
-    for include in ['pyramid_fanstatic',
+    for include in [
+                    'pyramid_fanstatic',
                     'pyramid_chameleon',
                     'pyramid_mako',
                     'rebecca.fanstatic',
