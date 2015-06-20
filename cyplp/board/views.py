@@ -27,6 +27,20 @@ import bcrypt
 
 from cyplp.board.rst_expression import RSTExpression
 
+class ItemMoved(object):
+    """
+    """
+    def __init__(self, item, fromColumn, toColumn):
+        self.item = item
+        self.fromColumn = fromColumn
+        self.toColumn = toColumn
+
+
+@subscriber(ItemMoved)
+def something(event):
+    print("evet !!")
+    print(event.item)
+
 # @subscriber(ApplicationCreated)
 # def application_created_subscriber(event):
 #     registry = event.app.registry
@@ -144,6 +158,7 @@ def moveItem(request):
             item['column'] = to
             request.db.save(item)
 
+            request.registry.notify(ItemMoved(item, to, from_))
             return "ok"
 
     return "ko"
