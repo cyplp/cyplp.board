@@ -1,0 +1,9 @@
+<div class="overlay">
+  <h2>${item['title']}</h2>
+    <div id="content" name="content" tal:condition="item.get('content')" >${rst: item.get('content', '')}</div>
+    <fieldset>
+      <button id="edit_item" class="button green" type="button">Edit</button>
+      <button id="close" class="button red close" type="button">Close</button>
+      <button id="delete" class="button red delete" type="button">Delete</button>
+    </fieldset>
+</div>
