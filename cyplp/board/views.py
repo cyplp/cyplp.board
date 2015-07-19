@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from pyramid.view import view_config
 from pyramid.view import forbidden_view_config
@@ -10,44 +11,21 @@ from pyramid.events import subscriber
 from pyramid.events import ApplicationCreated
 from pyramid.security import forget
 from pyramid.security import remember
+
 import bcrypt
 
-# import asyncio
-
-# from aiopyramid.helpers import synchronize
-#import couchdbkit
-
-
-# from cyplp.board.models import Board
-# from cyplp.board.models import Column
-# from cyplp.board.models import Item
-# from cyplp.board.models import TypeItem
-# from cyplp.board.models import User
-# from cyplp.board.models import Tag
-
 from cyplp.board.rst_expression import RSTExpression
+from cyplp.board.events import ItemMoved
 
-class ItemMoved(object):
-    """
-    """
-    def __init__(self, item, fromColumn, toColumn):
-        self.item = item
-        self.fromColumn = fromColumn
-        self.toColumn = toColumn
+
+from chameleon import PageTemplateFile
+PageTemplateFile.expression_types['rst'] = RSTExpression
 
 
 @subscriber(ItemMoved)
 def something(event):
     print("evet !!")
     print(event.item)
-
-# @subscriber(ApplicationCreated)
-# def application_created_subscriber(event):
-#     registry = event.app.registry
-#     db = registry.db.get_or_create_db(registry.settings['couchdb.db'])
-
-#     for schema in [Board, Column, Item, TypeItem, User, Tag]:
-#         schema.set_db(db)
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
 def home(request):
@@ -97,8 +75,8 @@ def board(request):
 
             columns[tmp['column']]['items'].append(tmp)
 
-    from chameleon import PageTemplateFile
-    PageTemplateFile.expression_types['rst'] = RSTExpression
+    # from chameleon import PageTemplateFile
+    # PageTemplateFile.expression_types['rst'] = RSTExpression
 
     return {'columns': columns,
             'board': board,
@@ -163,8 +141,13 @@ def moveItem(request):
 
     return "ko"
 
+
 @view_config(route_name="editItem", renderer="templates/edit.pt", permission="authenticated")
 def editItem(request):
+
+    import rpdb
+    rpdb.set_trace()
+
     boardId = request.matchdict['idBoard']
     item = request.db.get(request.matchdict['idItem'])
 
@@ -201,11 +184,11 @@ def validate(request, login, password):
     except couchdbkit.exceptions.ResourceNotFound:
         return False
     if bcrypt.hashpw(password.encode('utf-8'),
-                     user.password) != user.password:
+                     user['password']) != user['password']:
         return False
 
     request.session['login'] = login
-    request.session['admin'] = user.admin
+    request.session['admin'] = user['admin']
 
     return True
 
@@ -278,12 +261,15 @@ def columnTitlePost(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
+@view_config(route_name="itemFull", renderer="templates/item.pt", request_method="GET", permission="authenticated")
 @view_config(route_name="itemTitle", renderer="templates/item_title_form.pt",
              request_method="GET", permission="authenticated")
 def itemTitleGet(request):
     boardId = request.matchdict['idBoard']
     itemId = request.matchdict['idItem']
 
+    # from chameleon import PageTemplateFile
+    # PageTemplateFile.expression_types['rst'] = RSTExpression
 
     tmp = request.db.query("board/config" ,
                               startkey=[boardId, 0],
@@ -296,6 +282,9 @@ def itemTitleGet(request):
         item = request.db.get(itemId)
     except: #  better exception 404.
         return HTTPNotFound()
+
+    if 'content' not in item:
+        item['content'] = ''
 
     return {'item': item,
             'typeItems': typeItems,
@@ -321,6 +310,28 @@ def itemTitlePost(request):
     return HTTPFound(location=request.route_path('board', id=boardId))
 
 
+@view_config(route_name="itemComment", request_method="POST", permission="authenticated")
+def itemCommentPost(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = request.db.get(itemId)
+
+    commentContent = request.POST.get('comment').strip()
+    if commentContent:
+        comment = {'content': commentContent,
+                   'username': request.session['login'],
+                   'dt_insert': datetime.datetime.now().isoformat()}
+
+        if 'comments'  not in item:
+            item['comments'] = []
+
+
+        item['comments'].append(comment)
+
+        request.db.save(item)
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
 @view_config(route_name="account", renderer="templates/account.pt",
              request_method="GET", permission="authenticated")
 def accountGET(request):

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     for(var item=0, len=itemTitles.length; item<len; item++)
     {
     	var child = itemTitles[item].firstChild;
-
+	if (child == null) { continue ; }
     	if (child.hasChildNodes() == false)
     	    {
     		itemTitles[item].addEventListener('click',
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   var boardId = document.getElementById('board').dataset.board;
 
 						   var req = new XMLHttpRequest();
-						   req.open("GET", "/board/"+boardId+"/edit/"+itemId+"/title", true);
+						   req.open("GET", "/board/"+boardId+"/show/"+itemId+"/full", true);
 						   req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						   req.onreadystatechange = function () {
 						   if (req.readyState != 4 || req.status != 200) return;
@@ -54,6 +54,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						   close.addEventListener('click', function(event) {location.reload()});
 						   var deleteButton = document.getElementById('delete');
 						   deleteButton.addEventListener('click', function(event) {deleteItem(event, itemId, boardId);});
+
+						   var editButton = document.getElementById('edit_item');
+						   editButton.addEventListener('click', function(event) {editItem(event, itemId, boardId);});
 						   };
 
 						   req.send();
@@ -141,6 +144,19 @@ function clickColumnTitle(event){
 
     var req = new XMLHttpRequest();
     req.open("GET", "/board/"+boardId+"/column/"+column+"/title", true);
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    req.onreadystatechange = function () {
+	if (req.readyState != 4 || req.status != 200) return;
+	event.target.parentNode.outerHTML = req.responseText;
+    };
+
+    req.send();
+}
+
+function editItem(event, itemId, boardId){
+    var req = new XMLHttpRequest();
+
+    req.open("GET", "/board/"+boardId+"/edit/"+itemId+'/title', true);
     req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     req.onreadystatechange = function () {
 	if (req.readyState != 4 || req.status != 200) return;

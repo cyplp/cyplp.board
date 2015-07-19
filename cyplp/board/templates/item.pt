@@ -6,4 +6,20 @@
       <button id="close" class="button red close" type="button">Close</button>
       <button id="delete" class="button red delete" type="button">Delete</button>
     </fieldset>
+
+    <div id='commentSection'>
+      <div id='comments'>
+	<div class='comment' tal:repeat='comment item.get("comments", [])'>
+	  <h4>From: ${comment['username']} at ${comment['dt_insert']}</h4>
+	  ${rst: comment['content']}
+	</div>
+      </div>
+      <form method='POST' action="${request.route_path('itemComment', idBoard=item['board'], idItem=item['_id'])}">
+	<textarea name="comment">
+	</textarea>
+	<div>
+	  <button type="submit" class="green button">Comment</button>
+	</div>
+      </form>
+    </div>
 </div>
