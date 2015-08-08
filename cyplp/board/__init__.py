@@ -74,6 +74,7 @@ def main(global_config, **settings):
     config.add_route('deleteItem', '/board/{idBoard}/delete/{idItem}')
     config.add_route('itemTitle', '/board/{idBoard}/edit/{idItem}/title')
     config.add_route('itemFull', '/board/{idBoard}/show/{idItem}/full')
+    config.add_route('get_attachment', '/board/{idBoard}/edit/{idItem}/get/{attachment}')
     config.add_route('itemComment', '/board/{idBoard}/show/{idItem}/comment')
     config.add_route('uploadFile', '/board/{idBoard}/upload/{idItem}')
     config.add_route('editItemContent', '/board/{idBoard}/edit/{idItem}/content')

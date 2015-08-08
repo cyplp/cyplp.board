@@ -1,11 +1,25 @@
 <div class="overlay">
   <h2>${item['title']}</h2>
     <div id="content" name="content" tal:condition="item.get('content')" >${rst: item.get('content', '')}</div>
+    <div id='attachement' tal:condition="'_attachments in items'">
+      <h3>attachments</h3>
+      <ul>
+	<li tal:repeat='attachment item["_attachments"]'>
+	  <a class='attachment'
+	     data-mime-type="${item['_attachments'][attachment]['content_type']}"
+	     href="${request.route_path('get_attachment', idBoard=item['board'], idItem=item['_id'], attachment=attachment)}">
+	    ${attachment}
+	  </a>
+	</li>
+      </ul>
+    </div>
+
     <div>
       <button id="edit_item" class="button green" type="button">Edit</button>
       <button id="close" class="button red close" type="button">Close</button>
       <button id="delete" class="button red delete" type="button">Delete</button>
     </div>
+
     <div id='commentSection'>
       <div id='comments'>
 	<div class='comment' tal:repeat='comment item.get("comments", [])'>
