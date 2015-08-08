@@ -1,5 +1,6 @@
 import logging
 import datetime
+import collections
 
 from pyramid.view import view_config
 from pyramid.view import forbidden_view_config
@@ -13,6 +14,7 @@ from pyramid.security import forget
 from pyramid.security import remember
 
 import bcrypt
+import magic
 
 from cyplp.board.rst_expression import RSTExpression
 from cyplp.board.events import ItemMoved
@@ -442,6 +444,32 @@ def boardCSS(request):
     response.content_type = 'text/css'
     return response
 
+@view_config(route_name='uploadFile', request_method='POST', permission='authenticated')
+def uploadFile(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = request.db.get(itemId)
+
+    files = []
+
+    try:
+        files.extend([item for item in request.POST.mixed().get('content')])
+    except TypeError:
+        files.append(request.POST.mixed().get('content'))
+
+    for file_ in files:
+        filename = file_.filename
+        mime = ''
+
+        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as guess:
+            mime = guess.id_buffer(file_.file.read(1024))
+        file_.file.seek(0)
+
+        request.db.put_attachment(item, file_.file, filename, mime)
+        item = request.db.get(itemId)
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
 
 @view_config(route_name="deleteItem", request_method="DELETE",
              permission="authenticated", renderer='json')

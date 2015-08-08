@@ -6,9 +6,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.authentication import AuthTktAuthenticationPolicy
 
-
 import pycouchdb
-
 
 from cyplp.board.views import callback
 
@@ -77,6 +75,7 @@ def main(global_config, **settings):
     config.add_route('itemTitle', '/board/{idBoard}/edit/{idItem}/title')
     config.add_route('itemFull', '/board/{idBoard}/show/{idItem}/full')
     config.add_route('itemComment', '/board/{idBoard}/show/{idItem}/comment')
+    config.add_route('uploadFile', '/board/{idBoard}/upload/{idItem}')
     config.add_route('editItemContent', '/board/{idBoard}/edit/{idItem}/content')
     config.add_route('saveItemContent', '/board/{idBoard}/save/{idItem}/content')
     config.add_route("account", "/account/{id}")

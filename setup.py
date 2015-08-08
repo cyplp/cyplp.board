@@ -20,6 +20,7 @@ requires = [
     'docutils',
     'aiopyramid',
     'pycouchdb',
+    'filemagic',
     ]
 
 setup(name='cyplp.board',

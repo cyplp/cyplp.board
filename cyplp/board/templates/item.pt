@@ -20,6 +20,14 @@
 	  <button type="submit" class="green button">Comment</button>
 	</div>
       </form>
+      <form method='POST'
+	    action="${request.route_path('uploadFile', idBoard=item['board'], idItem=item['_id'])}"
+	    enctype='multipart/form-data'>
+	<input type="file" name="content" accept="*" multiple='multiple'/>
+	<div>
+	  <button type="submit" class="green button">Upload</button>
+	</div>
+      </form>
     </div>
 
 
