@@ -293,6 +293,23 @@ def itemTitleGet(request):
             'tags': tags,
            }
 
+@view_config(route_name="get_attachment", request_method='GET', permission='authenticated')
+def get_attachment(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = request.db.get(itemId)
+
+    if item['board'] == boardId:
+
+        response = request.response
+        headers = response.headers
+
+        headers['X-Accel-Redirect'] = str('/couch/'+itemId+'/get/'+request.matchdict['attachment'])
+
+        return response
+    else:
+        return HTTPNotFound()
 
 @view_config(route_name="itemTitle", request_method="POST", permission="authenticated")
 def itemTitlePost(request):
