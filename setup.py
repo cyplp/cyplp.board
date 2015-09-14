@@ -21,6 +21,7 @@ requires = [
     'aiopyramid',
     'pycouchdb',
     'filemagic',
+    'websocket',
     ]
 
 setup(name='cyplp.board',
