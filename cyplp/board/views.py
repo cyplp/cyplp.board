@@ -405,10 +405,10 @@ def updatepasswordPOST(request):
 def boardConfigGet(request):
     boardId = request.matchdict['id']
 
-    board = Board.get(boardId)
-    contents = request.db.view("board/config" ,
+    board = request.db.get(boardId)
+    contents = request.db.query("board/config" ,
                               startkey=[boardId, 0],
-                              endkey=[boardId, {}]).all()
+                              endkey=[boardId, {}])
 
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
