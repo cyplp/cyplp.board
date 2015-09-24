@@ -4,7 +4,7 @@
     <div id='attachement' tal:condition="'_attachments in items'">
       <h3>attachments</h3>
       <ul>
-	<li tal:repeat='attachment item["_attachments"]'>
+	<li tal:repeat='attachment item.get("_attachments", [])'>
 	  <a class='attachment'
 	     data-mime-type="${item['_attachments'][attachment]['content_type']}"
 	     href="${request.route_path('get_attachment', idBoard=item['board'], idItem=item['_id'], attachment=attachment)}">
