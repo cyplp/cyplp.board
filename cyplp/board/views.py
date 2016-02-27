@@ -424,17 +424,19 @@ def boardConfigPost(request):
 
     name = request.POST.get('name')
     color = request.POST.get('color', '#FFFFFF')
+
     if name:
+        configItem = {'doc_type': 'TypeItem',
+                        'name': name,
+                        'color': color,
+                        'board': boardId,}
+
         if request.POST.get('form', 'type') == 'type':
-            typeItem = TypeItem(name=name,
-                                color=color,
-                                board=boardId)
-            typeItem.save()
+            configItem['doc_type'] = 'TypeItem'
         else:
-            tag = Tag(name=name,
-                color=color,
-                board=boardId)
-            tag.save()
+            configItem['doc_type'] = 'Tag'
+
+        request.db.save(configItem)
 
     return HTTPFound(location=request.route_path('boardConfig', id=boardId))
 
