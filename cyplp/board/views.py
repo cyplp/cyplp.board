@@ -406,9 +406,10 @@ def boardConfigGet(request):
     boardId = request.matchdict['id']
 
     board = request.db.get(boardId)
-    contents = request.db.query("board/config" ,
-                              startkey=[boardId, 0],
-                              endkey=[boardId, {}])
+    contents = [current for current in request.db.query("board/config",
+                                                        startkey=[boardId, 0],
+                                                        endkey=[boardId, {}])]
+
 
     typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
     tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
@@ -446,14 +447,14 @@ def boardConfigPost(request):
 def boardCSS(request):
     boardId = request.matchdict['id']
 
-    contents = request.db.query("board/config" ,
-                              startkey=[boardId, 0],
-                              endkey=[boardId, {}])
+    contents = [current for current in request.db.query("board/config" ,
+                                                        startkey=[boardId, 0],
+                                                        endkey=[boardId, {}])]
 
     typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
                  for current in contents if current['key'][1] == 0]
 
-    tags = [".tag_%(_id)s {background-color: %(color)s;}" % {key: value for key, value in current['value'].iteritems()}
+    tags = [".tag_%(_id)s {background-color: %(color)s;}" % current['value']
                  for current in contents if current['key'][1] == 1]
 
     response = request.response
