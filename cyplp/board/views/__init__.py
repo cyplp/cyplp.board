@@ -54,7 +54,7 @@ def callback(uid, *args, **kw):
 
 @view_config(route_name='admin', renderer="cyplp.board:templates/admin.pt", request_method="GET", permission="authenticated")
 def admin(request):
-    users = request.db.view("user/all").all()
+    users = request.db.query("user/all")
     return {"users": users }
 
 
