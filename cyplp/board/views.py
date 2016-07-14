@@ -39,8 +39,9 @@ def home(request):
 def addBoard(request):
     title = request.POST.get('title', None)
 
-    # TODO userid
-    owner = 'cyp'
+    import pdb; pdb.set_trace()
+
+    owner = request.session['login']
 
     if title:
         doc = request.db.save({'title': title,
@@ -59,8 +60,8 @@ def board(request):
     board = request.db.get(boardId)
 
     tmp = request.db.query("board/content" ,
-                              startkey=[boardId, 0],
-                              endkey=[boardId, {}])
+                           startkey=[boardId, 0],
+                           endkey=[boardId, {}])
 
     contents = [current for current in tmp]
 
@@ -525,6 +526,7 @@ def loginPost(request):
 
     if (validate(request, login, password)):
         logging.info("%s logged", login)
+        request.session['login'] = login
         headers = remember(request, login)
         return HTTPFound(referrer, headers=headers)
     else:
