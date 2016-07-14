@@ -69,16 +69,3 @@ def boardTitlePost(request):
         request.db.save(board)
 
     return HTTPFound(location=request.route_path('board', id=board['_id']))
-
-
-@view_config(route_name="addColumn", permission="authenticated")
-def addColumn(request):
-    boardId = request.matchdict['id']
-    title = request.POST.get('title', None)
-    if title:
-        column = {'title': title.strip(),
-                  'board': boardId.strip(),
-                  'doc_type': 'Column'}
-        request.db.save(column)
-
-    return HTTPFound(location=request.route_path('board', id=boardId))
