@@ -1,6 +1,5 @@
 import logging
 import datetime
-import collections
 
 from pyramid.view import view_config
 from pyramid.view import forbidden_view_config
@@ -9,7 +8,6 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
-from pyramid.events import ApplicationCreated
 from pyramid.security import forget
 from pyramid.security import remember
 
@@ -29,13 +27,14 @@ def something(event):
     print("evet !!")
     print(event.item)
 
+
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
 def home(request):
     boards = request.db.query("board/all",
                                startkey=[request.session['login']],
                                endkey=[request.session['login'], {}])
-
     return {'boards': boards}
+
 
 @view_config(route_name="addBoard", request_method="POST", permission="authenticated")
 def addBoard(request):
@@ -76,9 +75,6 @@ def board(request):
                 columns[tmp['column']]['items'] = []
 
             columns[tmp['column']]['items'].append(tmp)
-
-    # from chameleon import PageTemplateFile
-    # PageTemplateFile.expression_types['rst'] = RSTExpression
 
     return {'columns': columns,
             'board': board,
