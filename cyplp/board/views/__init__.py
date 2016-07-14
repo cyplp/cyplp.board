@@ -24,7 +24,7 @@ PageTemplateFile.expression_types['rst'] = RSTExpression
 #     print(event.item)
 
 
-@view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
+@view_config(route_name='home', renderer="cyplp.board:templates/home.pt", permission="authenticated")
 def home(request):
     boards = request.db.query("board/all",
                                startkey=[request.session['login']],
@@ -49,10 +49,12 @@ def validate(request, login, password):
 def callback(uid, *args, **kw):
     return []
 
-@view_config(route_name='admin', renderer="templates/admin.pt", request_method="GET", permission="authenticated")
+
+@view_config(route_name='admin', renderer="cyplp.board:templates/admin.pt", request_method="GET", permission="authenticated")
 def admin(request):
     users = request.db.view("user/all").all()
     return {"users": users }
+
 
 @view_config(route_name='admin', request_method="POST", permission="authenticated")
 def adminPost(request):
@@ -75,7 +77,7 @@ def adminPost(request):
     return HTTPFound(location=request.route_path('admin'))
 
 
-@view_config(route_name="account", renderer="templates/account.pt",
+@view_config(route_name="account", renderer="cyplp.board:templates/account.pt",
              request_method="GET", permission="authenticated")
 def accountGET(request):
     user = request.db.get(request.matchdict['id'])
@@ -125,8 +127,8 @@ def updatepasswordPOST(request):
     return HTTPFound(location=request.route_path('account', id=user['_id']))
 
 
-@view_config(route_name='login', request_method='GET', renderer="templates/login.pt")
-@forbidden_view_config(renderer='templates/login.pt')
+@view_config(route_name='login', request_method='GET', renderer="cyplp.board:templates/login.pt")
+@forbidden_view_config(renderer='cyplp.board:templates/login.pt')
 def loginGet(request):
     return {}
 
@@ -150,6 +152,7 @@ def loginPost(request):
     else:
         logging.info("%s failed", login)
         return HTTPFound(request.route_path('login'))
+
 
 @view_config(route_name='logout', request_method='GET')
 def logout(request):

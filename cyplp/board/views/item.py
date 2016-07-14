@@ -56,7 +56,7 @@ def moveItem(request):
     return "ko"
 
 
-@view_config(route_name="editItem", renderer="templates/edit.pt", permission="authenticated")
+@view_config(route_name="editItem", renderer="cyplp.board:templates/edit.pt", permission="authenticated")
 def editItem(request):
 
     import rpdb
@@ -71,7 +71,7 @@ def editItem(request):
     return HTTPFound(location=request.route_path('board', id=boardId))
 
 
-@view_config(route_name="editItemContent", renderer="templates/edit_content.pt",
+@view_config(route_name="editItemContent", renderer="cyplp.board:templates/edit_content.pt",
              request_method="GET", permission="authenticated")
 def editItemContentGet(request):
     item = request.db.get(request.matchdict['idItem'])
@@ -93,8 +93,8 @@ def editItemContentGet(request):
 #                                                  idItem=request.matchdict['idItem']))
 
 
-@view_config(route_name="itemFull", renderer="templates/item.pt", request_method="GET", permission="authenticated")
-@view_config(route_name="itemTitle", renderer="templates/item_title_form.pt",
+@view_config(route_name="itemFull", renderer="cyplp.board:templates/item.pt", request_method="GET", permission="authenticated")
+@view_config(route_name="itemTitle", renderer="cyplp.board:templates/item_title_form.pt",
              request_method="GET", permission="authenticated")
 def itemTitleGet(request):
     boardId = request.matchdict['idBoard']
@@ -181,9 +181,6 @@ def itemCommentPost(request):
         request.db.save(item)
 
     return HTTPFound(location=request.route_path('board', id=boardId))
-
-
-
 
 
 @view_config(route_name='uploadFile', request_method='POST', permission='authenticated')

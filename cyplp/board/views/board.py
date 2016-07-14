@@ -19,7 +19,7 @@ def addBoard(request):
     return HTTPFound(location=request.route_path('home'))
 
 
-@view_config(route_name='board', renderer='templates/board.pt', permission="authenticated")
+@view_config(route_name='board', renderer='cyplp.board:templates/board.pt', permission="authenticated")
 def board(request):
 
     boardId = request.matchdict['id']
@@ -51,7 +51,7 @@ def board(request):
             }
 
 
-@view_config(route_name="boardTitle", renderer="templates/board_title_form.pt", request_method="GET", permission="authenticated")
+@view_config(route_name="boardTitle", renderer="cyplp.board:templates/board_title_form.pt", request_method="GET", permission="authenticated")
 def boardTitleGet(request):
     boardId = request.matchdict['id']
     board = request.db.get(boardId)
@@ -71,7 +71,7 @@ def boardTitlePost(request):
     return HTTPFound(location=request.route_path('board', id=board['_id']))
 
 @view_config(route_name="boardConfig", request_method="GET",
-             permission="authenticated", renderer="templates/board_config.pt")
+             permission="authenticated", renderer="cyplp.board:templates/board_config.pt")
 def boardConfigGet(request):
     boardId = request.matchdict['id']
 

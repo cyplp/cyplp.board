@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 
 
-@view_config(route_name="columnTitle", renderer="templates/column_title_form.pt",
+@view_config(route_name="columnTitle", renderer="cyplp.board:templates/column_title_form.pt",
              request_method="GET", permission="authenticated")
 def columnTitleGet(request):
     boardId = request.matchdict['idBoard']
