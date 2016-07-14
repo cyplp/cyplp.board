@@ -71,10 +71,14 @@ def adminPost(request):
                              bcrypt.gensalt())
 
     try:
-        User.get(login)
-    except couchdbkit.exceptions.ResourceNotFound:
-        user = User(_id=login, password=password, name=name)
-        user.save()
+        request.db.get(login)
+    except pycouchdb.exceptions.NotFound:
+        user = {'_id': login,
+                'password': password,
+                'name': name,
+                'doc_type': 'User',
+                'admin': False}
+        request.db.save(user)
 
     return HTTPFound(location=request.route_path('admin'))
 
