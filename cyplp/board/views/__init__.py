@@ -78,24 +78,6 @@ def adminPost(request):
 
     return HTTPFound(location=request.route_path('admin'))
 
-@view_config(route_name="boardTitle", renderer="templates/board_title_form.pt", request_method="GET", permission="authenticated")
-def boardTitleGet(request):
-    boardId = request.matchdict['id']
-    board = request.db.get(boardId)
-
-    return {'board': board}
-
-
-@view_config(route_name="boardTitle", request_method="POST", permission="authenticated")
-def boardTitlePost(request):
-    boardId = request.matchdict['id']
-    board = request.db.get(boardId)
-
-    if request.POST.get('title'):
-        board['title'] = request.POST.get('title')
-        request.db.save(board)
-
-    return HTTPFound(location=request.route_path('board', id=board['_id']))
 
 @view_config(route_name="columnTitle", renderer="templates/column_title_form.pt",
              request_method="GET", permission="authenticated")
