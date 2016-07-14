@@ -4,24 +4,24 @@ from pyramid.view import view_config
 from pyramid.view import forbidden_view_config
 
 from pyramid.httpexceptions import HTTPFound
-from pyramid.events import subscriber
+#from pyramid.events import subscriber
 from pyramid.security import forget
 from pyramid.security import remember
 
 import bcrypt
 
 from cyplp.board.rst_expression import RSTExpression
-from cyplp.board.events import ItemMoved
+#from cyplp.board.events import ItemMoved
 
 
 from chameleon import PageTemplateFile
 PageTemplateFile.expression_types['rst'] = RSTExpression
 
 
-@subscriber(ItemMoved)
-def something(event):
-    print("evet !!")
-    print(event.item)
+# @subscriber(ItemMoved)
+# def something(event):
+#     print("evet !!")
+#     print(event.item)
 
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
