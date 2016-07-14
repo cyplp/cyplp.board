@@ -47,13 +47,14 @@ def main(global_config, **settings):
                   ]:
         config.include(include)
 
-    config.registry.db = pycouchdb.Server(settings['couchdb.uri'])
 
-    def add_couchdb(request):
-        db = config.registry.db.database(settings['couchdb.db'])
-        return db
+    server = pycouchdb.Server(settings['couchdb.uri'])
+    config.registry.db = server.database(settings['couchdb.db'])
 
-    config.add_request_method(add_couchdb, 'db', reify=True)
+    def set_couchdb(request):
+        return config.registry.db
+
+    config.add_request_method(set_couchdb, 'db', reify=True)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
