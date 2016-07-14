@@ -69,3 +69,67 @@ def boardTitlePost(request):
         request.db.save(board)
 
     return HTTPFound(location=request.route_path('board', id=board['_id']))
+
+@view_config(route_name="boardConfig", request_method="GET",
+             permission="authenticated", renderer="templates/board_config.pt")
+def boardConfigGet(request):
+    boardId = request.matchdict['id']
+
+    board = request.db.get(boardId)
+    contents = [current for current in request.db.query("board/config",
+                                                        startkey=[boardId, 0],
+                                                        endkey=[boardId, {}])]
+
+
+    typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
+    tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
+
+    return {'board': board,
+            'typeItems': typeItems,
+            'tags': tags}
+
+@view_config(route_name="boardConfig", request_method="POST",
+             permission="authenticated")
+def boardConfigPost(request):
+    boardId = request.matchdict['id']
+
+    name = request.POST.get('name')
+    color = request.POST.get('color', '#FFFFFF')
+
+    if name:
+        configItem = {'doc_type': 'TypeItem',
+                        'name': name,
+                        'color': color,
+                        'board': boardId,}
+
+        if request.POST.get('form', 'type') == 'type':
+            configItem['doc_type'] = 'TypeItem'
+        else:
+            configItem['doc_type'] = 'Tag'
+
+        request.db.save(configItem)
+
+    return HTTPFound(location=request.route_path('boardConfig', id=boardId))
+
+
+@view_config(route_name="boardCSS", request_method="GET",
+             permission="authenticated")
+def boardCSS(request):
+    boardId = request.matchdict['id']
+
+    contents = [current for current in request.db.query("board/config" ,
+                                                        startkey=[boardId, 0],
+                                                        endkey=[boardId, {}])]
+
+    typeItems = [".type_%s {background-color: %s;}" % (current['value']['_id'], current['value']['color'])
+                 for current in contents if current['key'][1] == 0]
+
+    tags = [".tag_%(_id)s {background-color: %(color)s;}" % current['value']
+                 for current in contents if current['key'][1] == 1]
+
+    response = request.response
+
+    response.text = '\n'.join(["\n".join(typeItems), "\n".join(tags)])
+
+    response.content_type = 'text/css'
+    return response
