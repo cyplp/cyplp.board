@@ -31,16 +31,15 @@ def something(event):
 
 @view_config(route_name='home', renderer="templates/home.pt", permission="authenticated")
 def home(request):
-    boards = request.db.query("board/all")
+    boards = request.db.query("board/all",
+                               startkey=[request.session['login']],
+                               endkey=[request.session['login'], {}])
 
     return {'boards': boards}
 
 @view_config(route_name="addBoard", request_method="POST", permission="authenticated")
 def addBoard(request):
     title = request.POST.get('title', None)
-
-    import pdb; pdb.set_trace()
-
     owner = request.session['login']
 
     if title:
