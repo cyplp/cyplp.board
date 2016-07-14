@@ -1,6 +1,7 @@
 import logging
 import datetime
 
+import magic
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
@@ -180,3 +181,51 @@ def itemCommentPost(request):
         request.db.save(item)
 
     return HTTPFound(location=request.route_path('board', id=boardId))
+
+
+
+
+
+@view_config(route_name='uploadFile', request_method='POST', permission='authenticated')
+def uploadFile(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = request.db.get(itemId)
+
+    files = []
+
+    try:
+        files.extend([itemc for itemc in request.POST.mixed().get('content')])
+    except TypeError:
+        files.append(request.POST.mixed().get('content'))
+
+    for file_ in files:
+        filename = file_.filename
+        mime = ''
+
+        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as guess:
+            mime = guess.id_buffer(file_.file.read(1024))
+        file_.file.seek(0)
+
+        request.db.put_attachment(item, file_.file, filename, mime)
+        item = request.db.get(itemId)
+
+    return HTTPFound(location=request.route_path('board', id=boardId))
+
+
+@view_config(route_name="deleteItem", request_method="DELETE",
+             permission="authenticated", renderer='json')
+def deleteItem(request):
+    boardId = request.matchdict['idBoard']
+    itemId = request.matchdict['idItem']
+
+    item = request.db.get(itemId)
+
+    if boardId != item.board:
+        # TODO 404
+        return {"status": "ko"}
+
+    request.db.delete(item['_id'])
+
+    return {"status": "ok"}
