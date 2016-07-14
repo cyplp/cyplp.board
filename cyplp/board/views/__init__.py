@@ -10,6 +10,8 @@ from pyramid.security import remember
 
 import bcrypt
 
+import pycouchdb
+
 from cyplp.board.rst_expression import RSTExpression
 #from cyplp.board.events import ItemMoved
 
@@ -35,7 +37,7 @@ def home(request):
 def validate(request, login, password):
     try:
         user = request.db.get(login)
-    except couchdbkit.exceptions.ResourceNotFound:
+    except pycouchdb.exceptions.NotFound:
         return False
     if bcrypt.hashpw(password.encode('utf-8'),
                      user['password']) != user['password']:
