@@ -118,7 +118,7 @@ def updatepasswordPOST(request):
         print("mismatch password")
         return HTTPFound(location=request.route_path('account', id=user['_id']))
 
-    if not validate(request, user._id, old):
+    if not validate(request, user['_id'], old):
         # todo flash
         print("old one password")
         return HTTPFound(location=request.route_path('account', id=user['_id']))
