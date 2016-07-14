@@ -1,12 +1,9 @@
 import logging
-import datetime
 
 from pyramid.view import view_config
 from pyramid.view import forbidden_view_config
 
 from pyramid.httpexceptions import HTTPFound
-from pyramid.httpexceptions import HTTPNotFound
-# from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.events import subscriber
 from pyramid.security import forget
 from pyramid.security import remember
@@ -101,94 +98,6 @@ def columnTitlePost(request):
 
     return HTTPFound(location=request.route_path('board', id=boardId))
 
-@view_config(route_name="itemFull", renderer="templates/item.pt", request_method="GET", permission="authenticated")
-@view_config(route_name="itemTitle", renderer="templates/item_title_form.pt",
-             request_method="GET", permission="authenticated")
-def itemTitleGet(request):
-    boardId = request.matchdict['idBoard']
-    itemId = request.matchdict['idItem']
-
-    # from chameleon import PageTemplateFile
-    # PageTemplateFile.expression_types['rst'] = RSTExpression
-
-    tmp = request.db.query("board/config" ,
-                              startkey=[boardId, 0],
-                              endkey=[boardId, {}])
-    contents = [current for current in tmp]
-    typeItems = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 0}
-    tags = {current['value']['_id']: current['value'] for current in contents if current['key'][1] == 1}
-
-    try:
-        item = request.db.get(itemId)
-    except: #  better exception 404.
-        return HTTPNotFound()
-
-    if 'content' not in item:
-        item['content'] = ''
-
-    return {'item': item,
-            'typeItems': typeItems,
-            'tags': tags,
-           }
-
-@view_config(route_name="get_attachment", request_method='GET', permission='authenticated')
-def get_attachment(request):
-    boardId = request.matchdict['idBoard']
-    itemId = request.matchdict['idItem']
-
-    item = request.db.get(itemId)
-
-    if item['board'] == boardId:
-
-        response = request.response
-        headers = response.headers
-
-        headers['X-Accel-Redirect'] = str('/couch/'+itemId+'/get/'+request.matchdict['attachment'])
-
-        return response
-    else:
-        return HTTPNotFound()
-
-@view_config(route_name="itemTitle", request_method="POST", permission="authenticated")
-def itemTitlePost(request):
-    boardId = request.matchdict['idBoard']
-    itemId = request.matchdict['idItem']
-
-    item = request.db.get(itemId)
-    item['title'] = request.POST.get('title', '').strip()
-
-    item['typeItem'] = request.POST.get('type', '')
-
-    item['tags'] = request.POST.getall('tags')
-
-    item['content'] = request.POST.get('content', '').strip()
-    request.db.save(item)
-
-    return HTTPFound(location=request.route_path('board', id=boardId))
-
-
-@view_config(route_name="itemComment", request_method="POST", permission="authenticated")
-def itemCommentPost(request):
-    boardId = request.matchdict['idBoard']
-    itemId = request.matchdict['idItem']
-
-    item = request.db.get(itemId)
-
-    commentContent = request.POST.get('comment').strip()
-    if commentContent:
-        comment = {'content': commentContent,
-                   'username': request.session['login'],
-                   'dt_insert': datetime.datetime.now().isoformat()}
-
-        if 'comments'  not in item:
-            item['comments'] = []
-
-
-        item['comments'].append(comment)
-
-        request.db.save(item)
-
-    return HTTPFound(location=request.route_path('board', id=boardId))
 @view_config(route_name="account", renderer="templates/account.pt",
              request_method="GET", permission="authenticated")
 def accountGET(request):
